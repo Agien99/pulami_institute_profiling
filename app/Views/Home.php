@@ -31,11 +31,11 @@
                             <div class="col-md-5">
                                 <div class="book_tabel_item">
                                     <div class="input-group">
-                                        <select class="wide" onchange="javascript:handleSelect(this)">
-                                            <option data-display="State">State</option>
-                                            <option value="area">Perak</option>
-                                            <option value="2">State 2</option>
-                                            <option value="3">State 3</option>
+                                        <select id="state" name="state" class="form-control">
+                                            <option value="" disabled selected>~State~</option>
+                                            <?php foreach ($state as $states): ?>
+                                                <option value="<?= $states['state_id'] ?>"><?= $states['state_name'] ?></option>
+                                            <?php endforeach; ?>
                                         </select>
                                     </div>
                                     <a class="book_now_btn button_hover" href="#">Search</a>
@@ -44,11 +44,11 @@
                             <div class="col-md-5">
                                 <div class="book_tabel_item">
                                     <div class="input-group">
-                                        <select class="wide">
-                                            <option data-display="Tag">Tag</option>
-                                            <option value="1">LI</option>
-                                            <option value="2">LM</option>
-                                            <option value="3">PPG</option>
+                                        <select id="state" name="state" class="form-control">
+                                            <option value="" disabled selected>~Tag~</option>
+                                            <?php foreach ($tag as $tags): ?>
+                                                <option value="<?= $tags['practicum_type_id'] ?>"><?= $tags['practicum_type_code'] ?> - <?= $tags['practicum_type_desc'] ?></option>
+                                            <?php endforeach; ?>
                                         </select>
                                     </div>
                                     <a class="book_now_btn button_hover" href="#">Search</a>

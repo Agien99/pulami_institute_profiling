@@ -1,20 +1,26 @@
 <?php
 
 namespace App\Controllers;
+use App\Models\state;
+use App\Models\practicumType;
 
 class Home extends BaseController
 {
-    public function index(): string
+
+    protected $stateModel;
+    protected $practicumTypeModel;
+
+    public function __construct()
     {
-        return view('welcome_message');
+        $this->stateModel = new state();
+        $this->practicumTypeModel = new practicumType();
     }
-    public function Homepage(): string
+
+    public function Home()
     {
-        return view('testing/index');
-    }
-    public function Home(): string
-    {
-        return view('Home');
+        $data['state'] = $this->stateModel->load_state(); //load state
+        $data['tag'] = $this->practicumTypeModel->load_tag();
+        return view('Home', $data);
     }
     public function centredetails(): string
     {

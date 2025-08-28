@@ -26,11 +26,11 @@ class Database extends Config
      */
     public array $default = [
         'DSN'          => '',
-        'hostname'     => 'localhost',
-        'username'     => '',
-        'password'     => '',
-        'database'     => '',
-        'DBDriver'     => 'MySQLi',
+        'hostname'     => '10.99.4.5',
+        'username'     => 'postgres',
+        'password'     => 'wD6gM2vR1tM4hL9zU0rA',
+        'database'     => 'plmisys',
+        'DBDriver'     => 'Postgre',
         'DBPrefix'     => '',
         'pConnect'     => false,
         'DBDebug'      => true,
@@ -41,8 +41,9 @@ class Database extends Config
         'compress'     => false,
         'strictOn'     => false,
         'failover'     => [],
-        'port'         => 3306,
+        'port'         => 5432,
         'numberNative' => false,
+        'schema' => 'plmisys',
     ];
 
     /**
