@@ -37,10 +37,10 @@
                                 </div>									
                             </div>
                             <div class="col-lg-9 col-md-9 blog_details">
-                                <h2>Sekolah Menengah Kebangsaan Jalan Pasir Puteh</h2>
+                                <h2><?= esc($schoolDetail[0]['centre_name']) ?></h2>
                                 <p class="excert">
                                     <h4>Address</h4>
-                                    Jalan Pasir Puteh, Taman Taiping, 31650 Ipoh, Perak
+                                    <?= esc($schoolDetail[0]['centre_address']) ?>
                                 </p>
                                 
                             </div>
@@ -49,11 +49,11 @@
                                 <h2>Centre Details</h2>
                                 <div class="col-lg-6  col-md-6">
                                     <ul class="blog_meta list_style">
-                                        <li><h5>Postcode : 31650</h5></li>
-                                        <li><h5>City : Ipoh</h5></li>
-                                        <li><h5>State : Perak</h5></li>
-                                        <li><h5>Telephone No. : 6052530520</h5></li>
-                                        <li><h5>Email : N/A</h5></li>
+                                        <li><h5>Postcode : <?= esc($schoolDetail[0]['centre_postcode']) ?></h5></li>
+                                        <li><h5>City : <?= esc($schoolDetail[0]['city_name']) ?></h5></li>
+                                        <li><h5>State : <?= esc($schoolDetail[0]['state_name']) ?></h5></li>
+                                        <li><h5>Telephone No. : <?= esc($schoolDetail[0]['centre_phone']) ?></h5></li>
+                                        <li><h5>Email : <?= esc($schoolDetail[0]['centre_email']) ?></h5></li>
                                     </ul>
                                 </div>
                                 <br>
@@ -61,22 +61,21 @@
                                 </div>
                                 
                             </div>
-                                <div class="row">
-                
-                                    <div class="col-6">
-                                        <img class="img-fluid" style="height:180px ; width:450px; padding-bottom:10px" src="image/schooldetail/aea2043/2.jpg" alt="">
+                                <div class="quotes">
+                                <h2>Gallery</h2>    
+                                    <?php if (!empty($schoolImage)) : ?>
+                                        <?php foreach ($schoolImage as $index => $schoolImages) : ?>
+                                            <div class="col-6">
+                                                <img class="img-fluid" style="height:180px ; width:450px; padding-bottom:10px" src="image/schooldetail/<?= esc($schoolFacility['facilities_name']) ?>" alt="">
+                                            </div>
+                                        <?php endforeach; ?>
+                                        <?php else: ?>
+                                            <div class="col-12 text-center py-4">
+                                                <p class="text-muted mb-0">No Images have been uploaded yet</p>
+                                            </div>
+                                        <?php endif; ?>
                                     </div>
-                                    <div class="col-6">
-                                        <img class="img-fluid" style="height:180px ; width:450px; padding-bottom:10px" src="image/schooldetail/aea2043/3.jpg" alt="">
-                                    </div>
-                                    <div class="col-6">
-                                        <img class="img-fluid" style="height:180px ; width:450px; padding-bottom:10px" src="image/schooldetail/aea2043/4.jpg" alt="">
-                                    </div>
-                                    <div class="col-6">
-                                        <img class="img-fluid" style="height:180px ; width:450px; padding-bottom:10px" src="image/schooldetail/aea2043/5.jpg" alt="">
-                                    </div>			
                                 </div>
-                            </div>
                         </div>
                         <div class="comments-area">
                             <h4>Feedbacks</h4>
@@ -187,26 +186,6 @@
                                 </div>
                             </div>	                                             				
                         </div>
-                        <div class="comment-form">
-                            <h4>Leave a Reply</h4>
-                            <form>
-                                <div class="form-group form-inline">
-                                  <div class="form-group col-lg-6 col-md-6 name">
-                                    <input type="text" class="form-control" id="name" placeholder="Enter Name" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Enter Name'">
-                                  </div>
-                                  <div class="form-group col-lg-6 col-md-6 email">
-                                    <input type="email" class="form-control" id="email" placeholder="Enter email address" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Enter email address'">
-                                  </div>										
-                                </div>
-                                <div class="form-group">
-                                    <input type="text" class="form-control" id="subject" placeholder="Subject" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Subject'">
-                                </div>
-                                <div class="form-group">
-                                    <textarea class="form-control mb-10" rows="5" name="message" placeholder="Messege" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Messege'" required=""></textarea>
-                                </div>
-                                <a href="#" class="primary-btn button_hover">Post Comment</a>	
-                            </form>
-                        </div>
                     </div>
                     <div class="col-lg-4">
                         <div class="blog_right_sidebar">
@@ -216,44 +195,38 @@
                                     <li>
                                         <a href="#" class="d-flex justify-content-between">
                                             <p>School Type :</p>
-                                            <p>NORMAL</p>
+                                            <p><?= esc($schoolDetail[0]['school_type_name']) ?></p>
                                         </a>
                                     </li>
                                     <li>
                                         <a href="#" class="d-flex justify-content-between">
-                                            <p>School Location :</p>
-                                            <p>Luar Bandar</p>
+                                            <p>School Location</p>
+                                            <p><?= esc($schoolDetail[0]['school_location_name']) ?></p>
                                         </a>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="d-flex justify-content-between">
-                                            <p>Total Student :</p>
-                                            <p>250</p>
-                                        </a>
-                                    </li>												
+                                    </li>										
                                 </ul>
                                 <div class="br"></div>
                             </aside>
                             <aside class="single_sidebar_widget post_category_widget">
-                                <h4 class="widget_title">Industry Info :</h4>
+                                <h4 class="widget_title">Industry Info</h4>
                                 <ul class="list_style cat-list">
                                     <li>
                                         <a href="#" class="d-flex justify-content-between">
                                             <p>Industry Sector</p>
-                                            <p>Pendidikan</p>
+                                            <p><?= esc($schoolDetail[0]['sector_name']) ?></p>
                                         </a>
                                     </li>
                                     <li>
                                         <a href="#" class="d-flex justify-content-between">
                                             <p>Industry Type</p>
-                                            <p>Kerajaan</p>
+                                            <p><?= esc($schoolDetail[0]['industry_type_name']) ?></p>
                                         </a>
                                     </li>												
                                 </ul>
                                 <div class="br"></div>
                             </aside>
                             <aside class="single_sidebar_widget post_category_widget">
-                                <h4 class="widget_title">Overall Rating :</h4>
+                                <h4 class="widget_title">Overall Rating</h4>
                                 <ul class="list_style cat-list">
                                     <li>
                                        <!-- Star icons -->
@@ -269,17 +242,24 @@
                                 </ul>
                                 <div class="br"></div>
                             </aside>
+                            <aside class="single_sidebar_widget post_category_widget">
+                                <h4 class="widget_title">Centre For</h4>
+                                <ul class="list_style cat-list">
+                                    <li>Latihan Mengajar</li>		
+                                    <li>Latihan Industri</li>		
+                                </ul>
+                                <div class="br"></div>
+                            </aside>
                             <aside class="single-sidebar-widget tag_cloud_widget">
-                                <h4 class="widget_title">Available Facilites</h4>
+                                <h4 class="widget_title">Available Facilities</h4>
                                 <ul class="list_style">
-                                    <li><a href="#">Komputer iMac</a></li>
-                                    <li><a href="#">Pusat Sumber Cantik dan Selesa</a></li>
-                                    <li><a href="#">Padang Bola Karpet</a></li>
-                                    <li><a href="#">Trek</a></li>
-                                    <li><a href="#">Makmal Komputer</a></li>
-                                    <li><a href="#">Makmal Sains</a></li>
-                                    <li><a href="#">Asrama Pelajar</a></li>
-                                    <li><a href="#">Asrama Guru</a></li>
+                                    <?php if (!empty($schoolFacilities)) : ?>
+                                        <?php foreach ($schoolFacilities as $index => $schoolFacility) : ?>
+                                            <li><a href="#"><?= esc($schoolFacility['facilities_name']) ?></a></li>
+                                        <?php endforeach; ?>
+                                    <?php else: ?>
+                                        <li>No Facilities have been listed yet</li>
+                                    <?php endif; ?>
                                 </ul>
                             </aside>
                         </div>
@@ -291,8 +271,8 @@
         
         
         <script>
-  var latitude = 4.5792108345930324;
-  var longitude = 101.0815770707527;
+  var latitude = <?= esc($schoolDetail[0]['latitude']) ?>;
+  var longitude = <?= esc($schoolDetail[0]['longitude']) ?>;
 
   var map = L.map('map').setView([latitude, longitude], 17);
 

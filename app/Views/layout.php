@@ -44,7 +44,7 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse offset" id="navbarSupportedContent">
                 <ul class="nav navbar-nav menu_nav ml-auto">
-                    <li class="nav-item active"><a class="nav-link" href="home">Home</a></li>
+                    <li class="nav-item active"><a class="nav-link" href="/">Home</a></li>
                     <li class="nav-item"><a class="nav-link" href="more">More Company</a></li>
                     <li class="nav-item"><a class="nav-link" href="area">Search By Area</a></li>
                     <li class="nav-item">
