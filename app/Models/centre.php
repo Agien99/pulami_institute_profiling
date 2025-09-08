@@ -90,7 +90,6 @@ class centre extends Model
                 c.created_at,
                 c.edited_at,
                 c.deleted_at,
-                c.centre_image_id,
                 ct.city_name,
                 s.state_name,
                 s.state_id,
@@ -130,6 +129,18 @@ class centre extends Model
                 ci.centre_image_id, ci.centre_image_attachment, ci.centre_id
             ');
             $builder->where('ci.centre_id', $centre_id);
+            $query = $builder->get();
+            return $query->getResultArray();
+        }
+
+    public function load_school_practicum($centre_id)
+        {
+            $builder = $this->db->table('centre_practicum_type cpt');
+            $builder->select('
+                cpt.centre_practicum_type_id, cpt.centre_id, cpt.practicum_type_id, pt.practicum_type_desc
+            ');
+            $builder->join('practicum_type pt', 'cpt.practicum_type_id = pt.practicum_type_id');
+            $builder->where('cpt.centre_id', $centre_id);
             $query = $builder->get();
             return $query->getResultArray();
         }
