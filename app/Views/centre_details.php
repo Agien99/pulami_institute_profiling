@@ -245,8 +245,13 @@
                             <aside class="single_sidebar_widget post_category_widget">
                                 <h4 class="widget_title">Centre For</h4>
                                 <ul class="list_style cat-list">
-                                    <li>Latihan Mengajar</li>		
-                                    <li>Latihan Industri</li>		
+                                    <?php if (!empty($schoolPracticumFor)) : ?>
+                                        <?php foreach ($schoolPracticumFor as $index => $practicumFor) : ?>
+                                            <li><a href="#"><?= esc($practicumFor['practicum_type_desc']) ?></a></li>
+                                        <?php endforeach; ?>
+                                    <?php else: ?>
+                                        <li>No practicum has been set yet</li>
+                                    <?php endif; ?>
                                 </ul>
                                 <div class="br"></div>
                             </aside>
