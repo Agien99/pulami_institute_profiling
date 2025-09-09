@@ -39,7 +39,7 @@ class centre extends Model
     
     public function load_school_list()
         {
-            $builder = $this->db->table('centre c');
+            $builder = $this->db->table('centre_practicum_type cpt');
             $builder->select('
                 c.centre_id,
                 c.centre_code,
@@ -57,13 +57,16 @@ class centre extends Model
                 c.created_at,
                 c.edited_at,
                 c.deleted_at,
-                c.centre_image_id,
                 ct.city_name,
                 s.state_name,
-                s.state_id
+                s.state_id,
+                ci.centre_image_attachment,
+                ci.centre_image_id
             ');
+            $builder->join('centre c', 'c.centre_id = cpt.centre_id AND cpt.practicum_type_id = 7');
             $builder->join('city ct', 'ct.city_id = c.city_id');
             $builder->join('state s', 's.state_id = c.state_id');
+            $builder->join('centre_image ci', 'ci.centre_id = c.centre_id', 'left');
             $builder->orderBy('s.state_id', 'ASC');
             $builder->orderBy('c.city_id', 'ASC');
             $query = $builder->get();
