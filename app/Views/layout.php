@@ -23,6 +23,8 @@
     <!-- Leaflet css and js -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="<?= base_url('js/bootstrap.min.js') ?>"></script>
     <style>
         footer {
             background: #333;
@@ -91,26 +93,73 @@
 
     <!-- Login Modal -->
     <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-        <div class="modal-header">
-            <h5 class="modal-title" id="loginModalLabel">Login</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-            <form method="post" action="<?= base_url('/login')?>">
-                <div class="mb-3">
-                    <label>Username</label>
-                    <input type="username" name="username" class="form-control" required>
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="loginModalLabel">Login</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="mb-3">
-                    <label>Password</label>
-                    <input type="password" name="password" class="form-control" required>
+                <div class="modal-body">
+                    <?php if(session()->getFlashdata('login_error')): ?>
+                        <div class="alert alert-danger">
+                            <?= session()->getFlashdata('login_error') ?>
+                        </div>
+                    <?php endif; ?>
+                    <?php if(session()->getFlashdata('login_success')): ?>
+                        <div class="alert alert-success">
+                            <?= session()->getFlashdata('login_success') ?>
+                        </div>
+                    <?php endif; ?>
+
+                    <form id="loginForm" method="post" action="<?= base_url('/login')?>">
+                        <div id="loginMessage"></div> <!-- message will appear here -->
+                        <div class="mb-3">
+                            <label>Username</label>
+                            <input type="username" name="username" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label>Password</label>
+                            <input type="password" name="password" class="form-control" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Login</button>
+                    </form>
                 </div>
-                <button type="submit" class="btn btn-primary">Login</button>
-            </form>
+            </div>
         </div>
-        </div>
-    </div>
     </div>
 </body>
+
+<script>
+$(document).ready(function() {
+    $('#loginForm').submit(function(e) {
+        e.preventDefault(); // prevent default form submission
+        var form = $(this);
+        $('#loginMessage').html('');
+
+        $.ajax({
+            type: "POST",
+            url: form.attr('action'),
+            data: form.serialize(),
+            dataType: "json",
+            success: function(response) {
+                if(response.status === 'success') {
+                    $('#loginMessage').html('<div class="alert alert-success">' + response.message + '</div>');
+                    setTimeout(function() {
+                        $('#loginModal').modal('hide'); // hide modal
+                        window.location.href = response.redirect;
+                    }, 1000);
+                } else {
+                    $('#loginMessage').html('<div class="alert alert-danger">' + response.message + '</div>');
+                    // auto-hide after 2 seconds
+                    setTimeout(function() {
+                        $('#loginMessage').html('');
+                    }, 5000);
+                }
+            },
+            error: function() {
+                $('#loginMessage').html('<div class="alert alert-danger">Something went wrong.</div>');
+            }
+        });
+    });
+});
+</script>
