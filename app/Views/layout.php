@@ -35,7 +35,7 @@
     <div class="container">
         <nav class="navbar navbar-expand-lg navbar-light">
             <!-- Brand and toggle get grouped for better mobile display -->
-            <a class="navbar-brand logo_h" href="home"><img src="image/PLMISYSL.png" style=" height: 90px; max-width: 620px;" alt="Institute Profilling"></a>
+            <a class="navbar-brand logo_h" href="<?= base_url('/')?>"><img src="<?= base_url('image/PLMISYSL.png'); ?>" style=" height: 90px; max-width: 620px;" alt="Institute Profilling"></a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
@@ -44,9 +44,16 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse offset" id="navbarSupportedContent">
                 <ul class="nav navbar-nav menu_nav ml-auto">
-                    <li class="nav-item active"><a class="nav-link" href="/">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="more">More Company</a></li>
-                    <li class="nav-item"><a class="nav-link" href="area">Search By Area</a></li>
+                    <?php $current = uri_string(); ?>
+                    <li class="nav-item <?= ($current == '') ? 'active' : '' ?>">
+                        <a class="nav-link" href="<?= base_url('/') ?>">Home</a>
+                    </li>
+                    <li class="nav-item <?= ($current == 'more') ? 'active' : '' ?>">
+                        <a class="nav-link" href="<?= base_url('/more') ?>">More Company</a>
+                    </li>
+                    <li class="nav-item <?= ($current == 'area') ? 'active' : '' ?>">
+                        <a class="nav-link" href="<?= base_url('/area') ?>">Search By Area</a>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">School / Company Login</a>
                     </li>
@@ -91,7 +98,7 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-            <form method="post" action="/login/authenticate">
+            <form method="post" action="<?= base_url('/login')?>">
                 <div class="mb-3">
                     <label>Username</label>
                     <input type="username" name="username" class="form-control" required>
