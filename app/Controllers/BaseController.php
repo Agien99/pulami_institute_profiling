@@ -52,7 +52,30 @@ abstract class BaseController extends Controller
         parent::initController($request, $response, $logger);
 
         // Preload any models, libraries, etc, here.
-
+       
+        // Check for maintenance mode
+        if (file_exists(WRITEPATH . 'framework/down')) {
+            echo view('errors/html/error_503');
+            exit;
+        }
         // E.g.: $this->session = \Config\Services::session();
+        $this->session = service('session');
+    }
+
+    
+    public function __construct()
+    {
+        
+        $this->db = \Config\Database::connect(); // Initialize database connection
+    }
+
+    public function school($view, $data)
+    {
+        $uri = service('uri');
+        $modules = $uri->getSegment(1);
+        $view_path = 'Modules\\' . $modules . '\\Views\\';
+        $array['view'] = $view_path . $view;
+        $array['data'] = $data;
+        echo view('layout/school/main', $array);
     }
 }
