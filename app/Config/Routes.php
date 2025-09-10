@@ -13,6 +13,7 @@ $routes->get('more', 'More_Company::More');
 $routes->get('area', 'AreaSearch::Area');
 $routes->get('detail/(:num)', 'centre_details::Detail/$1');
 $routes->post('login', 'Login::login');
+$routes->get('logout', 'AuthController::logout');
 
 //routing for modules setup
 foreach(glob(ROOTPATH.'/Modules/*/Config/Routes.php') as $file) {
