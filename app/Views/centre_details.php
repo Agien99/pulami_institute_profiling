@@ -225,6 +225,38 @@
                                 </ul>
                                 <div class="br"></div>
                             </aside>
+
+                            <aside class="single_sidebar_widget post_category_widget">
+                                <h4 class="widget_title">Quota</h4>
+
+                                <ul class="list_style cat-list">
+                                    <!-- Total Quota -->
+                                    <li class="d-flex justify-content-between">
+                                        <span>Total Quota</span>
+                                        <span><?= esc($schoolDetail[0]['quota_limit']) ?></span>
+                                    </li>
+
+                                    <!-- Subjects Needed -->
+                                    <li class="mt-3">
+                                        <h5>Subjects Needed</h5>
+                                        <ul class="list_style cat-list">
+                                            <?php if (!empty($subjectsNeeded)) : ?>
+                                                <?php foreach ($subjectsNeeded as $subject) : ?>
+                                                    <li class="d-flex justify-content-between">
+                                                        <span><?= esc($subject['teach_subject_name']) ?></span>
+                                                        <span><?= esc($subject['needed_quota']) ?></span>
+                                                    </li>
+                                                <?php endforeach; ?>
+                                            <?php else: ?>
+                                                <li class="text-muted">No subjects needed</li>
+                                            <?php endif; ?>
+                                        </ul>
+                                    </li>
+                                </ul>
+
+                                <div class="br"></div>
+                            </aside>
+
                             <aside class="single_sidebar_widget post_category_widget">
                                 <h4 class="widget_title">Overall Rating</h4>
                                 <ul class="list_style cat-list">
