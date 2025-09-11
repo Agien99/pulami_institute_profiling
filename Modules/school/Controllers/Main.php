@@ -10,6 +10,8 @@ use Modules\school\Models\school_location;
 use Modules\school\Models\li_sector;
 use Modules\school\Models\li_industry;
 use Modules\school\Models\practicum_type;
+use Modules\school\Models\centre_subject_requirement;
+use Modules\school\Models\teach_subject;
 
  class Main extends BaseController
  {
@@ -26,6 +28,8 @@ use Modules\school\Models\practicum_type;
         $this->sectorModel = new li_sector();
         $this->industryTypeModel = new li_industry();
         $this->practicumTypeModel = new practicum_type();
+        $this->centreSubjectRequirementModel = new centre_subject_requirement();
+        $this->teachSubjectModel = new teach_subject();
     }
 
     
@@ -50,6 +54,8 @@ use Modules\school\Models\practicum_type;
         $data['sectors']            = $this->sectorModel->load_sector_list();
         $data['industryTypes']      = $this->industryTypeModel->load_industry_type();
         $data['allPracticumTypes']  = $this->practicumTypeModel->load_all_practicum();
+        $data['subjectsNeeded']   = $this->centreSubjectRequirementModel->load_needed_subject($centre_id);
+        $data['availableSubjects']  = $this->teachSubjectModel->load_all_subjects();
 
         // return view('centre_details', $data);
         $this->school('centre_details',$data);

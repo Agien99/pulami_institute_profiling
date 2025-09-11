@@ -1,7 +1,6 @@
 <?php
 
-namespace App\Models;
-
+namespace Modules\school\Models;
 use CodeIgniter\Model;
 
 class centre_subject_requirement extends Model
@@ -16,8 +15,7 @@ class centre_subject_requirement extends Model
         csr.centre_subject_requirement_id,
         csr.centre_id,
         csr.teach_subject_id,
-        csr.needed_quota,
-        ts.teach_subject_name
+        csr.needed_quota
         ');
         $builder->join('teach_subject ts', 'ts.teach_subject_id = csr.teach_subject_id');
         $builder->where('csr.centre_id', $centre_id);
