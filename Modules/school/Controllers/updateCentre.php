@@ -10,6 +10,7 @@ use Modules\school\Models\school_location;
 use Modules\school\Models\li_sector;
 use Modules\school\Models\li_industry;
 use Modules\school\Models\practicum_type;
+use Modules\school\Models\centre_subject_requirement;
 
  class updateCentre extends BaseController
  {
@@ -26,6 +27,7 @@ use Modules\school\Models\practicum_type;
         $this->sectorModel = new li_sector();
         $this->industryTypeModel = new li_industry();
         $this->practicumTypeModel = new practicum_type();
+        $this->centreSubjectRequirementModel = new centre_subject_requirement();
     }
 
     
@@ -45,6 +47,7 @@ use Modules\school\Models\practicum_type;
             $centreEmail        = $this->request->getPost('centre_email');
             $centreLatitude     = $this->request->getPost('latitude');
             $centreLongitude    = $this->request->getPost('longitude');
+            $subjects           = $this->request->getPost('subjects');
 
             //School Information
             $schoolTypeId         = $this->request->getPost('school_type_id');
@@ -145,6 +148,64 @@ use Modules\school\Models\practicum_type;
 
                 if (!empty($insertData)) {
                     $db->table('facilities_by_centre')->insertBatch($insertData);
+                }
+            }
+
+            // Quota Management
+            if (!empty($subjects)) {
+
+                // 1️⃣ Get existing subjects for this centre
+                $existing = $this->centreSubjectRequirementModel
+                    ->where('centre_id', $centreId)
+                    ->findAll();
+
+                $existingMap = [];
+                foreach ($existing as $row) {
+                    $existingMap[$row['teach_subject_id']] = $row;
+                }
+
+                $toInsert = [];
+                $toUpdate = [];
+                $keepIds  = [];
+
+                foreach ($subjects as $row) {
+                    $teachSubjectId = $row['teach_subject_id'];
+                    $neededQuota    = $row['needed_quota'];
+
+                    if (isset($existingMap[$teachSubjectId])) {
+                        // already exists → update
+                        $toUpdate[] = [
+                            'id'           => $existingMap[$teachSubjectId]['id'],
+                            'needed_quota' => $neededQuota,
+                        ];
+                        $keepIds[] = $existingMap[$teachSubjectId]['id'];
+                    } else {
+                        // new subject → insert
+                        $toInsert[] = [
+                            'centre_id'        => $centreId,
+                            'teach_subject_id' => $teachSubjectId,
+                            'needed_quota'     => $neededQuota
+                        ];
+                    }
+                }
+
+                // 2️⃣ Run updates
+                if (!empty($toUpdate)) {
+                    $this->centreSubjectRequirementModel->updateBatch($toUpdate, 'id');
+                }
+
+                // 3️⃣ Run inserts
+                if (!empty($toInsert)) {
+                    $this->centreSubjectRequirementModel->insertBatch($toInsert);
+                }
+
+                // 4️⃣ Delete removed subjects
+                if (!empty($existing)) {
+                    $existingIds = array_column($existing, 'id');
+                    $toDelete    = array_diff($existingIds, $keepIds);
+                    if (!empty($toDelete)) {
+                        $this->centreSubjectRequirementModel->whereIn('id', $toDelete)->delete();
+                    }
                 }
             }
 

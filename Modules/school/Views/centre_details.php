@@ -441,7 +441,7 @@
                     </div>
                 </div>
 
-                <!-- Sidebar with School/Industry Info -->
+                <!-- School/Industry Info -->
                 <div class="col-lg-4">
                     <div class="form-section">
                         <h4><i class="fa fa-school"></i> School Information</h4>
@@ -477,6 +477,7 @@
                         </div>
                     </div>
 
+                    <!-- Industry Information Section --> 
                     <div class="form-section">
                         <h4><i class="fa fa-industry"></i> Industry Information</h4>
                         
@@ -511,6 +512,72 @@
                         </div>
                     </div>
 
+                    <!-- Quota Management Section --> 
+                    <div class="form-section">
+                        <h4><i class="fa fa-clipboard-list"></i> Subject Quota Request</h4>
+                        
+                        <!-- JPN Allocated Quota (Read-only) -->
+                        <div class="alert alert-info">
+                            <strong><i class="fa fa-info-circle"></i> JPN Allocated Quota: </strong>
+                            <span class="badge badge-primary badge-lg"><?= isset($schoolDetail[0]['quota_limit']) ? esc($schoolDetail[0]['quota_limit']) : '0' ?></span> students
+                        </div>
+
+                        <!-- Subject Quota Selection -->
+                        <div class="mt-3">
+                            <h5><i class="fa fa-book"></i> Select Subjects & Student Numbers</h5>
+                            
+                            <div id="subject-quota-container">
+                                <?php if (!empty($subjectsNeeded)) : ?>
+                                    <?php foreach ($subjectsNeeded as $index => $subject) : ?>
+                                        <div class="subject-quota-row mb-3 p-3 border rounded">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <label for="subject_<?= $index ?>">Subject</label>
+                                                    <select class="form-control" name="subjects[<?= $index ?>][teach_subject_id]" id="subject_<?= $index ?>" required>
+                                                        <option value="">Select Subject</option>
+                                                        <?php if (!empty($availableSubjects)) : ?>
+                                                            <?php foreach ($availableSubjects as $availableSubject) : ?>
+                                                                <option value="<?= $availableSubject['teach_subject_id'] ?>" 
+                                                                    <?= (isset($subject['teach_subject_id']) && $subject['teach_subject_id'] == $availableSubject['teach_subject_id']) ? 'selected' : '' ?>>
+                                                                    <?= esc($availableSubject['teach_subject_name']) ?>
+                                                                </option>
+                                                            <?php endforeach; ?>
+                                                        <?php endif; ?>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="quota_<?= $index ?>">Students Needed</label>
+                                                    <input type="number" 
+                                                        class="form-control quota-input" 
+                                                        name="subjects[<?= $index ?>][needed_quota]" 
+                                                        id="quota_<?= $index ?>" 
+                                                        value="<?= isset($subject['needed_quota']) ? esc($subject['needed_quota']) : '' ?>" 
+                                                        min="1" 
+                                                        required>
+                                                </div>
+                                                <div class="col-md-2 d-flex align-items-end">
+                                                    <button type="button" class="btn btn-danger btn-sm remove-subject">
+                                                        <i class="fa fa-trash"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
+                            </div>
+                            
+                            <button type="button" class="btn btn-success btn-sm" id="add-subject">
+                                <i class="fa fa-plus"></i> Add Another Subject
+                            </button>
+                        </div>
+
+                        <!-- Quota Validation Warning -->
+                        <div id="quota-warning" class="alert alert-warning mt-3" style="display: none;">
+                            <strong>Notice:</strong> You have reached the JPN allocated quota limit. You cannot add more subjects or increase student numbers beyond this limit.
+                        </div>
+                    </div>
+
+                    <!-- Practicum Types Section -->     
                     <div class="form-section">
                         <h4><i class="fa fa-users"></i> Practicum Types</h4>
                         
@@ -977,4 +1044,91 @@ function showToast(message, type = 'info') {
         setTimeout(() => toast.remove(), 400);
     }, 5000);
 }
+
+//Quota Management Section
+$(document).ready(function() {
+    let subjectIndex = <?= !empty($subjectsNeeded) ? count($subjectsNeeded) : 0 ?>;
+    const jpnQuota = <?= isset($schoolDetail[0]['quota_limit']) ? $schoolDetail[0]['quota_limit'] : 0 ?>;
+    
+    // Add new subject row
+    $('#add-subject').click(function() {
+        const subjectRow = `
+            <div class="subject-quota-row mb-3 p-3 border rounded">
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="subject_${subjectIndex}">Subject</label>
+                        <select class="form-control" name="subjects[${subjectIndex}][teach_subject_id]" id="subject_${subjectIndex}" required>
+                            <option value="">Select Subject</option>
+                            <?php if (!empty($availableSubjects)) : ?>
+                                <?php foreach ($availableSubjects as $availableSubject) : ?>
+                                    <option value="<?= $availableSubject['teach_subject_id'] ?>">
+                                        <?= esc($availableSubject['teach_subject_name']) ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="quota_${subjectIndex}">Students Needed</label>
+                        <input type="number" 
+                               class="form-control quota-input" 
+                               name="subjects[${subjectIndex}][needed_quota]" 
+                               id="quota_${subjectIndex}" 
+                               min="1" 
+                               required>
+                    </div>
+                    <div class="col-md-2 d-flex align-items-end">
+                        <button type="button" class="btn btn-danger btn-sm remove-subject">
+                            <i class="fa fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+        $('#subject-quota-container').append(subjectRow);
+        subjectIndex++;
+        calculateTotal();
+    });
+    
+    // Remove subject row
+    $(document).on('click', '.remove-subject', function() {
+        $(this).closest('.subject-quota-row').remove();
+        calculateTotal();
+    });
+    
+    // Calculate total when quota inputs change
+    $(document).on('input', '.quota-input', function() {
+        calculateTotal();
+    });
+    
+    // Calculate total function
+    function calculateTotal() {
+        let total = 0;
+        $('.quota-input').each(function() {
+            const value = parseInt($(this).val()) || 0;
+            total += value;
+        });
+
+        if (total >= jpnQuota) {
+            $('#quota-warning').show();
+            $('#add-subject').prop('disabled', true);
+
+            // Disable increasing further
+            $('.quota-input').each(function() {
+                const currentVal = parseInt($(this).val()) || 0;
+                const remaining = jpnQuota - (total - currentVal);
+                $(this).attr('max', remaining); // set max so they cannot increase beyond limit
+            });
+        } else {
+            $('#quota-warning').hide();
+            $('#add-subject').prop('disabled', false);
+
+            // Reset max so fields can adjust freely again
+            $('.quota-input').removeAttr('max');
+        }
+    }
+    
+    // Initial calculation
+    calculateTotal();
+});
 </script>
