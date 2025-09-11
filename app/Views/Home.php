@@ -157,7 +157,7 @@
                         data-index="<?= $index ?>">
                         <div class="accomodation_item text-center">
                             <div class="hotel_img">
-                                <img src="<?= $school['centre_image_id'] ? base_url('image/' . $school['centre_image_id']) : base_url('image/plmi.png') ?>" 
+                                <img src="<?= $school['centre_image_id'] ? base_url('image/' . $school['centre_code'] . '/' . $school['centre_image_id']) : base_url('image/plmi.png') ?>" 
                                     width="230" height="230" alt="">
                                 <a href="<?= base_url('detail/' . $school['centre_id']) ?>" class="btn theme_btn button_hover">Learn more</a>
                             </div>
@@ -165,6 +165,12 @@
                                 <h4 class="sec_h4"><?= esc($school['centre_name']) ?></h4>
                             </a>
                             <h5><?= esc($school['city_name']) ?>, <?= esc($school['state_name']) ?></h5>
+
+                            <?php if (!empty($school['practicum_type_id'])): ?>
+                                <span class="badge text-white bg-success mt-2">
+                                    <?= $school['practicum_type_desc']?>
+                                </span>
+                            <?php endif; ?>
                         </div>
                     </div>
                 <?php endforeach; ?>
