@@ -61,11 +61,14 @@ class centre extends Model
                 s.state_name,
                 s.state_id,
                 ci.centre_image_attachment,
+                pt.practicum_type_desc,
+                pt.practicum_type_id,
                 ci.centre_image_id
             ');
             $builder->join('centre c', 'c.centre_id = cpt.centre_id AND cpt.practicum_type_id = 7');
             $builder->join('city ct', 'ct.city_id = c.city_id');
             $builder->join('state s', 's.state_id = c.state_id');
+            $builder->join('practicum_type pt', 'pt.practicum_type_id = cpt.practicum_type_id');
             $builder->join('centre_image ci', 'ci.centre_id = c.centre_id', 'left');
             $builder->orderBy('s.state_id', 'ASC');
             $builder->orderBy('c.city_id', 'ASC');
