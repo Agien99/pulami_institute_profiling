@@ -38,43 +38,47 @@ class centre extends Model
     ];
     
     public function load_school_list()
-        {
-            $builder = $this->db->table('centre_practicum_type cpt');
-            $builder->select('
-                c.centre_id,
-                c.centre_code,
-                c.centre_name,
-                c.centre_address,
-                c.centre_postcode,
-                c.centre_phone,
-                c.centre_email,
-                c.current_quota,
-                c.quota_limit,
-                c.allowance,
-                c.range,
-                c.longitude,
-                c.latitude,
-                c.created_at,
-                c.edited_at,
-                c.deleted_at,
-                ct.city_name,
-                s.state_name,
-                s.state_id,
-                ci.centre_image_attachment,
-                pt.practicum_type_desc,
-                pt.practicum_type_id,
-                ci.centre_image_id
-            ');
-            $builder->join('centre c', 'c.centre_id = cpt.centre_id AND cpt.practicum_type_id = 7');
-            $builder->join('city ct', 'ct.city_id = c.city_id');
-            $builder->join('state s', 's.state_id = c.state_id');
-            $builder->join('practicum_type pt', 'pt.practicum_type_id = cpt.practicum_type_id');
-            $builder->join('centre_image ci', 'ci.centre_id = c.centre_id', 'left');
-            $builder->orderBy('s.state_id', 'ASC');
-            $builder->orderBy('c.city_id', 'ASC');
-            $query = $builder->get();
-            return $query->getResultArray();
-        }
+    {
+        $builder = $this->db->table('centre c');
+        $builder->select("
+            c.centre_id,
+            c.centre_code,
+            c.centre_name,
+            c.centre_address,
+            c.centre_postcode,
+            c.centre_phone,
+            c.centre_email,
+            c.current_quota,
+            c.quota_limit,
+            c.allowance,
+            c.range,
+            c.longitude,
+            c.latitude,
+            c.created_at,
+            c.edited_at,
+            c.deleted_at,
+            ct.city_name,
+            s.state_name,
+            s.state_id,
+            ci.centre_image_attachment,
+            ci.centre_image_id,
+            STRING_AGG(pt.practicum_type_desc, ', ') AS practicum_type_desc,
+            STRING_AGG(pt.practicum_type_id::text, ',') AS practicum_type_id
+        ", false);
+
+        $builder->join('centre_practicum_type cpt', 'cpt.centre_id = c.centre_id', 'left');
+        $builder->join('practicum_type pt', 'pt.practicum_type_id = cpt.practicum_type_id', 'left');
+        $builder->join('city ct', 'ct.city_id = c.city_id');
+        $builder->join('state s', 's.state_id = c.state_id');
+        $builder->join('centre_image ci', 'ci.centre_id = c.centre_id', 'left');
+
+        $builder->groupBy('c.centre_id, ct.city_name, s.state_name, s.state_id, ci.centre_image_attachment, ci.centre_image_id');
+        $builder->orderBy('s.state_id', 'ASC');
+        $builder->orderBy('c.city_id', 'ASC');
+
+        $query = $builder->get();
+        return $query->getResultArray();
+    }
 
     public function load_school_detail($centre_id)
         {
