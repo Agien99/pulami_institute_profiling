@@ -175,10 +175,10 @@ use Modules\school\Models\centre_subject_requirement;
                     if (isset($existingMap[$teachSubjectId])) {
                         // already exists → update
                         $toUpdate[] = [
-                            'id'           => $existingMap[$teachSubjectId]['id'],
-                            'needed_quota' => $neededQuota,
+                            'centre_subject_requirement_id' => $existingMap[$teachSubjectId]['centre_subject_requirement_id'], // ✅ use correct PK
+                            'needed_quota'                  => $neededQuota,
                         ];
-                        $keepIds[] = $existingMap[$teachSubjectId]['id'];
+                        $keepIds[] = $existingMap[$teachSubjectId]['centre_subject_requirement_id']; // ✅ use correct PK
                     } else {
                         // new subject → insert
                         $toInsert[] = [
@@ -191,7 +191,7 @@ use Modules\school\Models\centre_subject_requirement;
 
                 // 2️⃣ Run updates
                 if (!empty($toUpdate)) {
-                    $this->centreSubjectRequirementModel->updateBatch($toUpdate, 'id');
+                    $this->centreSubjectRequirementModel->updateBatch($toUpdate, 'centre_subject_requirement_id'); // ✅
                 }
 
                 // 3️⃣ Run inserts
@@ -201,11 +201,34 @@ use Modules\school\Models\centre_subject_requirement;
 
                 // 4️⃣ Delete removed subjects
                 if (!empty($existing)) {
-                    $existingIds = array_column($existing, 'id');
+                    $existingIds = array_column($existing, 'centre_subject_requirement_id'); // ✅
                     $toDelete    = array_diff($existingIds, $keepIds);
                     if (!empty($toDelete)) {
-                        $this->centreSubjectRequirementModel->whereIn('id', $toDelete)->delete();
+                        $this->centreSubjectRequirementModel
+                            ->whereIn('centre_subject_requirement_id', $toDelete) // ✅
+                            ->delete();
                     }
+                }
+            }
+
+            // Practicum Types
+            $practicumTypeIds = $this->request->getPost('practicum_types');
+
+            // Clear all for this centre
+            $db->table('centre_practicum_type')->where('centre_id', $centreId)->delete();
+
+            // Insert back whatever is ticked
+            if (!empty($practicumTypeIds) && is_array($practicumTypeIds)) {
+                $insertData = [];
+                foreach ($practicumTypeIds as $typeId) {
+                    $insertData[] = [
+                        'centre_id'         => $centreId,
+                        'practicum_type_id' => $typeId
+                    ];
+                }
+
+                if (!empty($insertData)) {
+                    $db->table('centre_practicum_type')->insertBatch($insertData);
                 }
             }
 
