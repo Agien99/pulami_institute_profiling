@@ -121,7 +121,6 @@
                                             <?php endforeach; ?>
                                         </select>
                                     </div>
-                                    <a class="book_now_btn button_hover" href="#" onclick="filterSchools()">Search</a>
                                 </div>
                             </div>
                         </div>
@@ -167,9 +166,16 @@
                             <h5><?= esc($school['city_name']) ?>, <?= esc($school['state_name']) ?></h5>
 
                             <?php if (!empty($school['practicum_type_id'])): ?>
-                                <span class="badge text-white bg-success mt-2">
-                                    <?= $school['practicum_type_desc']?>
-                                </span>
+                                <?php 
+                                    $ids   = explode(',', $school['practicum_type_id']);
+                                    $descs = explode(',', $school['practicum_type_desc']);
+                                ?>
+                                <?php foreach ($ids as $i => $id): ?>
+                                    <span class="badge text-white bg-success mt-2">
+                                        <?= trim($descs[$i] ?? '') ?>
+                                    </span>
+                                    <br>
+                                <?php endforeach; ?>
                             <?php endif; ?>
                         </div>
                     </div>
@@ -317,10 +323,10 @@ function filterSchools() {
     // Filter items based on selected criteria
     filteredItems = $('.school-item').filter(function() {
         const itemState = $(this).data('state').toString();
-        const itemTag = $(this).data('tag').toString();
+        const itemTags = $(this).data('tag').toString().split(','); // split multiple tags
         
         let matchState = !stateFilter || stateFilter === '' || itemState === stateFilter;
-        let matchTag = !tagFilter || tagFilter === '' || itemTag === tagFilter;
+        let matchTag = !tagFilter || tagFilter === '' || itemTags.includes(tagFilter); // check contains
         
         return matchState && matchTag;
     }).toArray();

@@ -23,6 +23,7 @@ class Home extends BaseController
         $data['state'] = $this->stateModel->load_state(); //load state
         $data['tag'] = $this->practicumTypeModel->load_tag(); //load tag
         $data['schoolList'] = $this->centreModel->load_school_list(); //load school list
+        $data['schoolList1'] = $this->centreModel->load_school_list(); //load school list
         return view('Home', $data);
     }
     public function centredetails(): string
