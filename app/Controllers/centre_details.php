@@ -21,4 +21,12 @@ class centre_details extends BaseController
         $data['subjectsNeeded'] = $this->requiredSubjectModel->load_needed_subject($centre_id); //load school practicum required
         return view('centre_details', $data);
     }
+
+    public function Detail2($centre_id2)
+    {
+        $data['companyDetail'] = $this->centreModel->load_company_detail($centre_id2); //load company detail
+        $data['companyImage'] = $this->centreModel->load_company_image($centre_id2); //load company image
+        $data['companyFacilities'] = $this->centreModel->load_company_facilities($centre_id2); //load company facilities
+        return view('centre_details2', $data);
+    }
 }
