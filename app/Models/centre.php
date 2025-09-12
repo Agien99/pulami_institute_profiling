@@ -154,4 +154,116 @@ class centre extends Model
             $query = $builder->get();
             return $query->getResultArray();
         }
+
+    //Company
+    public function load_company_list()
+    {
+        $builder = $this->db->table('centre c');
+        $builder->select("
+            c.centre_id,
+            c.centre_code,
+            c.centre_name,
+            c.centre_address,
+            c.centre_postcode,
+            c.centre_phone,
+            c.centre_email,
+            c.current_quota,
+            c.quota_limit,
+            c.allowance,
+            c.range,
+            c.longitude,
+            c.latitude,
+            c.created_at,
+            c.edited_at,
+            c.deleted_at,
+            ct.city_name,
+            s.state_name,
+            s.state_id,
+            ci.centre_image_attachment,
+            ci.centre_image_id,
+            STRING_AGG(pt.practicum_type_desc, ', ') AS practicum_type_desc,
+            STRING_AGG(pt.practicum_type_id::text, ',') AS practicum_type_id
+        ", false);
+
+        $builder->join('centre_practicum_type cpt', 'cpt.centre_id = c.centre_id', 'left');
+        $builder->join('practicum_type pt', 'pt.practicum_type_id = cpt.practicum_type_id', 'left');
+        $builder->join('city ct', 'ct.city_id = c.city_id');
+        $builder->join('state s', 's.state_id = c.state_id');
+        $builder->join('centre_image ci', 'ci.centre_id = c.centre_id', 'left');
+
+        $builder->groupBy('c.centre_id, ct.city_name, s.state_name, s.state_id, ci.centre_image_attachment, ci.centre_image_id');
+        $builder->orderBy('s.state_id', 'ASC');
+        $builder->orderBy('c.city_id', 'ASC');
+        $builder->where('cpt.practicum_type_id', '12');
+
+        $query = $builder->get();
+        return $query->getResultArray();
+    }
+
+    public function load_company_detail($centre_id2)
+        {
+            $builder = $this->db->table('centre c');
+            $builder->select('
+                c.centre_id,
+                c.centre_code,
+                c.centre_name,
+                c.centre_address,
+                c.centre_postcode,
+                c.centre_phone,
+                c.centre_email,
+                c.current_quota,
+                c.quota_limit,
+                c.allowance,
+                c.range,
+                c.latitude,
+                c.longitude,
+                ct.city_name,
+                s.state_name,
+                ls.sector_name,
+                li.industry_type_name
+            ');
+            $builder->join('city ct', 'ct.city_id = c.city_id');
+            $builder->join('state s', 's.state_id = c.state_id');
+            $builder->join('li_sector ls', 'ls.li_sector_id = c.li_sector_id');
+            $builder->join('li_industry li', 'li.industry_li_id = c.industry_li_id');
+            $builder->orderBy('s.state_id', 'ASC');
+            $builder->orderBy('c.city_id', 'ASC');
+            $builder->where('c.centre_id', $centre_id2);
+            $query = $builder->get();
+            return $query->getResultArray();
+        }
+        
+        function load_company_facilities($centre_id2)
+        {
+            $builder = $this->db->table('facilities_by_centre fbc');
+            $builder->select('
+                fbc.facilities_by_centre_id, fbc.facilities_name, fbc.centre_id
+            ');
+            $builder->where('fbc.centre_id', $centre_id2);
+            $query = $builder->get();
+            return $query->getResultArray();
+        }
+
+        function load_company_image($centre_id2)
+        {
+            $builder = $this->db->table('centre_image ci');
+            $builder->select('
+                ci.centre_image_id, ci.centre_image_attachment, ci.centre_id
+            ');
+            $builder->where('ci.centre_id', $centre_id2);
+            $query = $builder->get();
+            return $query->getResultArray();
+        }
+        
+        function load_company_practicum($centre_id2)
+        {
+            $builder = $this->db->table('centre_practicum_type cpt');
+            $builder->select('
+                cpt.centre_practicum_type_id, cpt.centre_id, cpt.practicum_type_id, pt.practicum_type_desc
+            ');
+            $builder->join('practicum_type pt', 'cpt.practicum_type_id = pt.practicum_type_id');
+            $builder->where('cpt.centre_id', $centre_id2);
+            $query = $builder->get();
+            return $query->getResultArray();
+        }
 }

@@ -203,57 +203,42 @@
     <div class="container">
         <div class="section_title text-center">
             <h2 class="title_color">Latihan Industri</h2>
-            <p>For ISMP student that are going for your teaching practice </p>
+            <p>For ISM/ISM student that are going for your teaching practice </p>
         </div>
         <div class="row mb_30">
-            <div class="col-lg-3 col-sm-6">
-                <div class="accomodation_item text-center">
-                    <div class="hotel_img">
-                        <img src="image/Longi.png" alt="">
-                        <a href="centre_details2" class="btn theme_btn button_hover">Learn more</a>
+            <?php if (!empty($schoolList)) : ?>
+                <?php foreach ($companyList as $index => $company) : ?>
+                    <div class="col-lg-3 col-sm-6" 
+                        data-state="<?= $company['state_id'] ?>" 
+                        data-tag="<?= isset($company['practicum_type_id']) ? $company['practicum_type_id'] : '' ?>"
+                        data-index="<?= $index ?>">
+                        <div class="accomodation_item text-center">
+                            <div class="hotel_img">
+                                <img src="<?= $company['centre_image_id'] ? base_url('image/' . $company['centre_code'] . '/' . $company['centre_image_id']) : base_url('image/plmi.png') ?>" 
+                                    width="230" height="230" alt="">
+                                <a href="<?= base_url('detail2/' . $company['centre_id']) ?>" class="btn theme_btn button_hover">Learn more</a>
+                            </div>
+                            <a href="<?= base_url('detail2/' . $company['centre_id']) ?>">
+                                <h4 class="sec_h4"><?= esc($company['centre_name']) ?></h4>
+                            </a>
+                            <h5><?= esc($company['city_name']) ?>, <?= esc($company['state_name']) ?></h5>
+
+                            <?php if (!empty($company['practicum_type_id'])): ?>
+                                <?php 
+                                    $ids   = explode(',', $company['practicum_type_id']);
+                                    $descs = explode(',', $company['practicum_type_desc']);
+                                ?>
+                                <?php foreach ($ids as $i => $id): ?>
+                                    <span class="badge text-white bg-success mt-2">
+                                        <?= trim($descs[$i] ?? '') ?>
+                                    </span>
+                                    <br>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
+                        </div>
                     </div>
-                    <a href="centre_details2">
-                        <h4 class="sec_h4">Longi</h4>
-                    </a>
-                    <h5>Kuching, Sarawak</h5>
-                </div>
-            </div>
-            <div class="col-lg-3 col-sm-6">
-                <div class="accomodation_item text-center">
-                    <div class="hotel_img">
-                        <img src="image/plmi.png" alt="">
-                        <a href="#" class="btn theme_btn button_hover">Learn more</a>
-                    </div>
-                    <a href="#">
-                        <h4 class="sec_h4">Institute 2</h4>
-                    </a>
-                    <h5>Address</h5>
-                </div>
-            </div>
-            <div class="col-lg-3 col-sm-6">
-                <div class="accomodation_item text-center">
-                    <div class="hotel_img">
-                        <img src="image/plmi.png" alt="">
-                        <a href="#" class="btn theme_btn button_hover">Learn more</a>
-                    </div>
-                    <a href="#">
-                        <h4 class="sec_h4">Institute 3</h4>
-                    </a>
-                    <h5>Address</h5>
-                </div>
-            </div>
-            <div class="col-lg-3 col-sm-6">
-                <div class="accomodation_item text-center">
-                    <div class="hotel_img">
-                        <img src="image/plmi.png" alt="">
-                        <a href="#" class="btn theme_btn button_hover">Learn more</a>
-                    </div>
-                    <a href="#">
-                        <h4 class="sec_h4">Institute 4</h4>
-                    </a>
-                    <h5>Address</h5>
-                </div>
-            </div>
+                <?php endforeach; ?>
+            <?php endif; ?>
         </div>
     </div>
 </section>
