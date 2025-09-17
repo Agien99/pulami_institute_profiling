@@ -3,6 +3,7 @@
 namespace App\Controllers;
 use App\Models\centre;
 use App\Models\centre_subject_requirement;
+use App\Models\centre_programme_requirement;
 
 class centre_details extends BaseController
 {
@@ -10,6 +11,7 @@ class centre_details extends BaseController
     {
         $this->centreModel = new centre();
         $this->requiredSubjectModel = new centre_subject_requirement();
+        $this->centreProgrammeRequirementModel = new centre_programme_requirement();
     }
 
     public function Detail($centre_id)
@@ -27,6 +29,7 @@ class centre_details extends BaseController
         $data['companyDetail'] = $this->centreModel->load_company_detail($centre_id2); //load company detail
         $data['companyImage'] = $this->centreModel->load_company_image($centre_id2); //load company image
         $data['companyFacilities'] = $this->centreModel->load_company_facilities($centre_id2); //load company facilities
+        $data['requiredProgramme'] = $this->centreProgrammeRequirementModel->load_company_required_programme($centre_id2); //load company required programme
         return view('centre_details2', $data);
     }
 }

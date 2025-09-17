@@ -213,17 +213,19 @@
                                 <h4 class="widget_title">Quota</h4>
 
                                 <ul class="list_style cat-list">
-                                    <!-- Total Quota -->
-                                    <li class="d-flex justify-content-between">
-                                        <span>Total Quota</span>
-                                        <span><?= esc($companyDetail[0]['quota_limit']) ?></span>
-                                    </li>
-
-                                    <!-- Subjects Needed -->
                                     <li class="mt-3">
-                                        <h5>Subjects Needed</h5>
+                                        <h5>Programme Needed</h5>
                                         <ul class="list_style cat-list">
-                                            <span>AC10 - Software Engineering</span>
+                                            <?php if (!empty($requiredProgramme)) : ?>
+                                                <?php foreach ($requiredProgramme as $programme) : ?>
+                                                    <li class="d-flex justify-content-between">
+                                                        <span><?= esc($programme['programme_name']) ?></span>
+                                                        <span><?= esc($programme['quota_needed']) ?></span>
+                                                    </li>
+                                                <?php endforeach; ?>
+                                            <?php else: ?>
+                                                <li class="text-muted">No subjects needed</li>
+                                            <?php endif; ?>
                                         </ul>
                                     </li>
                                 </ul>
