@@ -248,8 +248,12 @@ class centre extends Model
         {
             $builder = $this->db->table('centre_image ci');
             $builder->select('
-                ci.centre_image_id, ci.centre_image_attachment, ci.centre_id
+                ci.centre_image_id, 
+                ci.centre_image_attachment, 
+                ci.centre_id,
+                c.centre_code
             ');
+            $builder->join('centre c', 'c.centre_id = ci.centre_id');
             $builder->where('ci.centre_id', $centre_id2);
             $query = $builder->get();
             return $query->getResultArray();

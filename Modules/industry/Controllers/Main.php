@@ -5,13 +5,13 @@ use App\Controllers\BaseController;
 use Modules\industry\Models\centre;
 use Modules\industry\Models\state;
 use Modules\industry\Models\city;
-use Modules\industry\Models\school_type;
-use Modules\industry\Models\school_location;
 use Modules\industry\Models\li_sector;
 use Modules\industry\Models\li_industry;
 use Modules\industry\Models\practicum_type;
 use Modules\industry\Models\centre_subject_requirement;
+use Modules\industry\Models\centre_programme_requirement;
 use Modules\industry\Models\teach_subject;
+use Modules\industry\Models\programme_practicum_type;
 
  class Main extends BaseController
  {
@@ -23,13 +23,13 @@ use Modules\industry\Models\teach_subject;
         $this->centreModel = new centre();
         $this->stateModel = new state();
         $this->cityModel = new city();
-        $this->schoolTypeModel = new school_type();
-        $this->schoolLocationModel = new school_location();
         $this->sectorModel = new li_sector();
         $this->industryTypeModel = new li_industry();
         $this->practicumTypeModel = new practicum_type();
         $this->centreSubjectRequirementModel = new centre_subject_requirement();
+        $this->centreProgrammeRequirementModel = new centre_programme_requirement();
         $this->teachSubjectModel = new teach_subject();
+        $this->programmePracticumTypeModel = new programme_practicum_type();
     }
 
     
@@ -43,19 +43,18 @@ use Modules\industry\Models\teach_subject;
             return redirect()->to('/login')->with('error', 'Session expired. Please log in again.');
         }
 
-        $data['schoolDetail']       = $this->centreModel->load_school_detail($centre_id);
-        $data['schoolImage']        = $this->centreModel->load_school_image($centre_id);
-        $data['schoolFacilities']   = $this->centreModel->load_school_facilities($centre_id);
-        $data['schoolPracticumFor'] = $this->centreModel->load_school_practicum($centre_id);
-        $data['states']             = $this->stateModel->load_state_list();
-        $data['cities']             = $this->cityModel->load_city_list();
-        $data['schoolTypes']        = $this->schoolTypeModel->load_school_type();
-        $data['schoolLocations']    = $this->schoolLocationModel->load_school_location();
-        $data['sectors']            = $this->sectorModel->load_sector_list();
-        $data['industryTypes']      = $this->industryTypeModel->load_industry_type();
-        $data['allPracticumTypes']  = $this->practicumTypeModel->load_all_practicum();
-        $data['subjectsNeeded']   = $this->centreSubjectRequirementModel->load_needed_subject($centre_id);
-        $data['availableSubjects']  = $this->teachSubjectModel->load_all_subjects();
+        $data['industryDetail']         = $this->centreModel->load_industry_detail($centre_id);
+        $data['industryImage']          = $this->centreModel->load_industry_image($centre_id);
+        $data['industryFacilities']     = $this->centreModel->load_industry_facilities($centre_id);
+        $data['industryPracticumFor']   = $this->centreModel->load_industry_practicum($centre_id);
+        $data['states']                 = $this->stateModel->load_state_list();
+        $data['cities']                 = $this->cityModel->load_city_list();
+        $data['sectors']                = $this->sectorModel->load_sector_list();
+        $data['industryTypes']          = $this->industryTypeModel->load_industry_type();
+        $data['allPracticumTypes']      = $this->practicumTypeModel->load_all_practicum();
+        $data['programmesNeeded']       = $this->centreProgrammeRequirementModel->load_needed_programme($centre_id);
+        $data['availableSubjects']      = $this->teachSubjectModel->load_all_subjects();
+        $data['availableProgrammes']    = $this->programmePracticumTypeModel->load_programme_for_li();
 
         // return view('centre_details', $data);
         $this->industry('centre_details',$data);

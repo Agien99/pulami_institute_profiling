@@ -47,17 +47,8 @@
             <div class="collapse navbar-collapse offset" id="navbarSupportedContent">
                 <ul class="nav navbar-nav menu_nav ml-auto">
                     <?php $current = uri_string(); ?>
-                    <li class="nav-item <?= ($current == '') ? 'active' : '' ?>">
-                        <a class="nav-link" href="<?= base_url('/') ?>">Home</a>
-                    </li>
-                    <li class="nav-item <?= ($current == 'more') ? 'active' : '' ?>">
-                        <a class="nav-link" href="<?= base_url('/more') ?>">More Company</a>
-                    </li>
-                    <li class="nav-item <?= ($current == 'area') ? 'active' : '' ?>">
-                        <a class="nav-link" href="<?= base_url('/area') ?>">Search By Area</a>
-                    </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">School / Company Login</a>
+                        <a class="nav-link" href="<?= base_url('/logout') ?>">Logout</a>
                     </li>
                 </ul>
             </div>
@@ -69,7 +60,7 @@
 
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
-        <?= $this->renderSection("content") ?>
+        <?= view($view, $data) ?>
     </div>
 
     <footer class="footer-area section_gap">
@@ -121,52 +112,10 @@
                             <label>Password</label>
                             <input type="password" name="password" class="form-control" required>
                         </div>
-                        <button type="submit" class="btn btn-primary" data-login-type="school">School Login</button>
-                        <button type="submit" class="btn btn-secondary" data-login-type="industry">Industry Login</button>
+                        <button type="submit" class="btn btn-primary">Login</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
 </body>
-
-<script>
-$(document).ready(function() {
-    var loginType = 'school'; // default
-
-    // Detect which button is clicked
-    $('#loginForm button[type=submit]').click(function(e) {
-        loginType = $(this).data('login-type');
-    });
-
-    $('#loginForm').submit(function(e) {
-        e.preventDefault();
-        var form = $(this);
-        $('#loginMessage').html('');
-
-        $.ajax({
-            type: "POST",
-            url: form.attr('action'),
-            data: form.serialize() + '&login_type=' + loginType, // send type
-            dataType: "json",
-            success: function(response) {
-                if(response.status === 'success') {
-                    $('#loginMessage').html('<div class="alert alert-success">' + response.message + '</div>');
-                    setTimeout(function() {
-                        $('#loginModal').modal('hide');
-                        window.location.href = response.redirect;
-                    }, 1000);
-                } else {
-                    $('#loginMessage').html('<div class="alert alert-danger">' + response.message + '</div>');
-                    setTimeout(function() {
-                        $('#loginMessage').html('');
-                    }, 5000);
-                }
-            },
-            error: function() {
-                $('#loginMessage').html('<div class="alert alert-danger">Something went wrong.</div>');
-            }
-        });
-    });
-});
-</script>

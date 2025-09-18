@@ -66,7 +66,7 @@
                                     <?php if (!empty($companyImage)) : ?>
                                         <?php foreach ($companyImage as $index => $companyImages) : ?>
                                             <div class="col-6">
-                                                <img class="img-fluid" style="height:180px ; width:450px; padding-bottom:10px" src="image/schooldetail/<?= esc($companyImages['centre_image_attachment']) ?>" alt="">
+                                                <img class="img-fluid" style="height:180px ; width:450px; padding-bottom:10px" src="image/industrydetail/<?= esc($companyImages['centre_code']) ?>/<?= esc($companyImages['centre_image_attachment']) ?>" alt="">
                                             </div>
                                         <?php endforeach; ?>
                                         <?php else: ?>
@@ -253,7 +253,13 @@
                             <aside class="single_sidebar_widget post_category_widget">
                                 <h4 class="widget_title">Allowance</h4>
                                 <ul class="list_style cat-list">
-                                    <li>RM <a href="#"><?= esc($companyDetail[0]['allowance']) ?></a></li>
+                                    <li>
+                                        <?php if (!empty($companyDetail[0]['allowance']) && $companyDetail[0]['allowance'] !== 'NULL'): ?>
+                                            RM <a href="#"><?= esc($companyDetail[0]['allowance']) ?></a>
+                                        <?php else: ?>
+                                            <span class="text-muted">Not specified</span>
+                                        <?php endif; ?>
+                                    </li>
                                 </ul>
                                 <div class="br"></div>
                             </aside>
