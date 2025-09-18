@@ -78,4 +78,14 @@ abstract class BaseController extends Controller
         $array['data'] = $data;
         echo view('layout/school/main', $array);
     }
+
+    public function industry($view, $data)
+    {
+        $uri = service('uri');
+        $modules = $uri->getSegment(1);
+        $view_path = 'Modules\\' . $modules . '\\Views\\';
+        $array['view'] = $view_path . $view;
+        $array['data'] = $data;
+        echo view('layout/industry/main', $array);
+    }
 }

@@ -210,7 +210,7 @@
 <section class="blog_area">
     <div class="container">
         <form id="centreForm">
-            <input type="hidden" name="centre_id" value="<?= esc($schoolDetail[0]['centre_id'] ?? '') ?>">
+            <input type="hidden" name="centre_id" value="<?= esc($industryDetail[0]['centre_id'] ?? '') ?>">
             
             <div class="row">
                 <div class="col-lg-8">
@@ -220,16 +220,16 @@
                         
                         <div class="form-group">
                             <label for="centre_name">Centre Name *</label>
-                            <input type="hidden" class="form-control" id="centre_id" name="centre_id" value="<?= esc($schoolDetail[0]['centre_id'] ?? '') ?>" >
-                            <input type="hidden" class="form-control" id="centre_code" name="centre_code" value="<?= esc($schoolDetail[0]['centre_code'] ?? '') ?>" >
+                            <input type="hidden" class="form-control" id="centre_id" name="centre_id" value="<?= esc($industryDetail[0]['centre_id'] ?? '') ?>" >
+                            <input type="hidden" class="form-control" id="centre_code" name="centre_code" value="<?= esc($industryDetail[0]['centre_code'] ?? '') ?>" >
                             <input type="text" class="form-control" id="centre_name" name="centre_name" 
-                                   value="<?= esc($schoolDetail[0]['centre_name'] ?? '') ?>" required>
+                                   value="<?= esc($industryDetail[0]['centre_name'] ?? '') ?>" required>
                         </div>
 
                         <div class="form-group">
                             <label for="centre_address">Address *</label>
                             <textarea class="form-control" id="centre_address" name="centre_address" 
-                                      rows="3" required><?= esc($schoolDetail[0]['centre_address'] ?? '') ?></textarea>
+                                      rows="3" required><?= esc($industryDetail[0]['centre_address'] ?? '') ?></textarea>
                         </div>
 
                         <div class="row">
@@ -237,7 +237,7 @@
                                 <div class="form-group">
                                     <label for="centre_postcode">Postcode *</label>
                                     <input type="text" class="form-control" id="centre_postcode" name="centre_postcode" 
-                                           value="<?= esc($schoolDetail[0]['centre_postcode'] ?? '') ?>" required>
+                                           value="<?= esc($industryDetail[0]['centre_postcode'] ?? '') ?>" required>
                                 </div>
                             </div>
                             <div class="col-md-4">
@@ -248,7 +248,7 @@
                                         <?php if (!empty($cities)) : ?>
                                             <?php foreach ($cities as $city) : ?>
                                                 <option value="<?= $city['city_id'] ?>" 
-                                                    <?= (isset($schoolDetail[0]['city_id']) && $schoolDetail[0]['city_id'] == $city['city_id']) ? 'selected' : '' ?>>
+                                                    <?= (isset($industryDetail[0]['city_id']) && $industryDetail[0]['city_id'] == $city['city_id']) ? 'selected' : '' ?>>
                                                     <?= esc($city['city_name']) ?>
                                                 </option>
                                             <?php endforeach; ?>
@@ -264,7 +264,7 @@
                                         <?php if (!empty($states)) : ?>
                                             <?php foreach ($states as $state) : ?>
                                                 <option value="<?= $state['state_id'] ?>" 
-                                                    <?= (isset($schoolDetail[0]['state_id']) && $schoolDetail[0]['state_id'] == $state['state_id']) ? 'selected' : '' ?>>
+                                                    <?= (isset($industryDetail[0]['state_id']) && $industryDetail[0]['state_id'] == $state['state_id']) ? 'selected' : '' ?>>
                                                     <?= esc($state['state_name']) ?>
                                                 </option>
                                             <?php endforeach; ?>
@@ -279,14 +279,14 @@
                                 <div class="form-group">
                                     <label for="centre_phone">Telephone Number</label>
                                     <input type="text" class="form-control" id="centre_phone" name="centre_phone" 
-                                           value="<?= esc($schoolDetail[0]['centre_phone'] ?? '') ?>">
+                                           value="<?= esc($industryDetail[0]['centre_phone'] ?? '') ?>">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="centre_email">Email Address</label>
                                     <input type="email" class="form-control" id="centre_email" name="centre_email" 
-                                           value="<?= esc($schoolDetail[0]['centre_email'] ?? '') ?>">
+                                           value="<?= esc($industryDetail[0]['centre_email'] ?? '') ?>">
                                 </div>
                             </div>
                         </div>
@@ -301,14 +301,14 @@
                                 <div class="form-group">
                                     <label for="latitude">Latitude</label>
                                     <input type="number" step="any" class="form-control" id="latitude" name="latitude" 
-                                           value="<?= esc($schoolDetail[0]['latitude'] ?? '') ?>">
+                                           value="<?= esc($industryDetail[0]['latitude'] ?? '') ?>">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="longitude">Longitude</label>
                                     <input type="number" step="any" class="form-control" id="longitude" name="longitude" 
-                                           value="<?= esc($schoolDetail[0]['longitude'] ?? '') ?>">
+                                           value="<?= esc($industryDetail[0]['longitude'] ?? '') ?>">
                                 </div>
                             </div>
                         </div>
@@ -318,7 +318,7 @@
                             <div id="map-editor"></div>
                             <div class="coordinates-display">
                                 Current Location: <span id="current-coords">
-                                    <?= esc($schoolDetail[0]['latitude'] ?? '0') ?>, <?= esc($schoolDetail[0]['longitude'] ?? '0') ?>
+                                    <?= esc($industryDetail[0]['latitude'] ?? '0') ?>, <?= esc($industryDetail[0]['longitude'] ?? '0') ?>
                                 </span>
                             </div>
                         </div>
@@ -372,11 +372,11 @@
                                 These are saved in your gallery. Hover to see remove button (×)
                             </small>
                             <div class="row" id="existing-images">
-                                <?php if (!empty($schoolImage)) : ?>
-                                    <?php foreach ($schoolImage as $index => $image) : ?>
+                                <?php if (!empty($industryImage)) : ?>
+                                    <?php foreach ($industryImage as $index => $image) : ?>
                                         <div class="col-md-3 mb-3 existing-image" data-image-id="<?= $image['centre_image_id'] ?>">
                                             <div class="image-preview existing" style="position: relative; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); transition: transform 0.3s; border: 2px solid #6c757d;">
-                                                <img src="image/schooldetail/<?= esc($schoolDetail[0]['centre_code'] ?? '0') ?>/<?= esc($image['centre_image_attachment']) ?>" 
+                                                <img src="image/industrydetail/<?= esc($industryDetail[0]['centre_code'] ?? '0') ?>/<?= esc($image['centre_image_attachment']) ?>" 
                                                     class="img-fluid" alt="Gallery Image" style="width: 100%; height: 180px; object-fit: cover;">
                                                 <div class="remove-image" data-image-id="<?= $image['centre_image_id'] ?>" 
                                                     title="Click to remove this image"
@@ -421,8 +421,8 @@
                         <div class="current-facilities">
                             <label>Current Facilities:</label>
                             <div class="facilities-list">
-                                <?php if (!empty($schoolFacilities)) : ?>
-                                    <?php foreach ($schoolFacilities as $facility) : ?>
+                                <?php if (!empty($industryFacilities)) : ?>
+                                    <?php foreach ($industryFacilities as $facility) : ?>
                                         <span class="facility-tag">
                                             <?= esc($facility['facilities_name']) ?>
                                             <span class="remove-facility" data-facility-id="<?= $facility['facilities_by_centre_id'] ?>">
@@ -443,40 +443,6 @@
 
                 <!-- School/Industry Info -->
                 <div class="col-lg-4">
-                    <div class="form-section">
-                        <h4><i class="fa fa-school"></i> Industry Information</h4>
-                        
-                        <div class="form-group">
-                            <label for="school_type_id">Industry Type</label>
-                            <select class="form-control" id="school_type_id" name="school_type_id">
-                                <option value="">Select Industry Type</option>
-                                <?php if (!empty($schoolTypes)) : ?>
-                                    <?php foreach ($schoolTypes as $type) : ?>
-                                        <option value="<?= $type['school_type_id'] ?>" 
-                                            <?= (isset($schoolDetail[0]['school_type_id']) && $schoolDetail[0]['school_type_id'] == $type['school_type_id']) ? 'selected' : '' ?>>
-                                            <?= esc($type['school_type_name']) ?>
-                                        </option>
-                                    <?php endforeach; ?>
-                                <?php endif; ?>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="school_location_id">Industry Location</label>
-                            <select class="form-control" id="school_location_id" name="school_location_id">
-                                <option value="">Select Industry Location</option>
-                                <?php if (!empty($schoolLocations)) : ?>
-                                    <?php foreach ($schoolLocations as $location) : ?>
-                                        <option value="<?= $location['school_location_id'] ?>" 
-                                            <?= (isset($schoolDetail[0]['school_location_id']) && $schoolDetail[0]['school_location_id'] == $location['school_location_id']) ? 'selected' : '' ?>>
-                                            <?= esc($location['school_location_name']) ?>
-                                        </option>
-                                    <?php endforeach; ?>
-                                <?php endif; ?>
-                            </select>
-                        </div>
-                    </div>
-
                     <!-- Industry Information Section --> 
                     <div class="form-section">
                         <h4><i class="fa fa-industry"></i> Industry Information</h4>
@@ -488,7 +454,7 @@
                                 <?php if (!empty($sectors)) : ?>
                                     <?php foreach ($sectors as $sector) : ?>
                                         <option value="<?= $sector['li_sector_id'] ?>" 
-                                            <?= (isset($schoolDetail[0]['li_sector_id']) && $schoolDetail[0]['li_sector_id'] == $sector['li_sector_id']) ? 'selected' : '' ?>>
+                                            <?= (isset($industryDetail[0]['li_sector_id']) && $industryDetail[0]['li_sector_id'] == $sector['li_sector_id']) ? 'selected' : '' ?>>
                                             <?= esc($sector['sector_name']) ?>
                                         </option>
                                     <?php endforeach; ?>
@@ -503,77 +469,100 @@
                                 <?php if (!empty($industryTypes)) : ?>
                                     <?php foreach ($industryTypes as $type) : ?>
                                         <option value="<?= $type['industry_li_id'] ?>" 
-                                            <?= (isset($schoolDetail[0]['industry_li_id']) && $schoolDetail[0]['industry_li_id'] == $type['industry_li_id']) ? 'selected' : '' ?>>
+                                            <?= (isset($industryDetail[0]['industry_li_id']) && $industryDetail[0]['industry_li_id'] == $type['industry_li_id']) ? 'selected' : '' ?>>
                                             <?= esc($type['industry_type_name']) ?>
                                         </option>
                                     <?php endforeach; ?>
                                 <?php endif; ?>
                             </select>
                         </div>
+
+                        <div class="form-group">
+                            <label for="industry_allowance">Allowance</label>
+                            <input type="number" class="form-control" id="industry_allowance" name="industry_allowance" value="<?= esc($industryDetail[0]['allowance']) ?>">
+                        </div>
                     </div>
 
                     <!-- Quota Management Section --> 
                     <div class="form-section">
-                        <h4><i class="fa fa-clipboard-list"></i> Subject Quota Request</h4>
+                        <h4><i class="fa fa-clipboard-list"></i> Programme Quota Request</h4>
                         
-                        <!-- JPN Allocated Quota (Read-only) -->
-                        <div class="alert alert-info">
-                            <strong><i class="fa fa-info-circle"></i> JPN Allocated Quota: </strong>
-                            <span class="badge badge-primary badge-lg"><?= isset($schoolDetail[0]['quota_limit']) ? esc($schoolDetail[0]['quota_limit']) : '0' ?></span> students
-                        </div>
-
                         <!-- Subject Quota Selection -->
                         <div class="mt-3">
-                            <h5><i class="fa fa-book"></i> Select Subjects & Student Numbers</h5>
+                            <h5><i class="fa fa-book"></i> Select Programme & Student Numbers</h5>
                             
                             <div id="subject-quota-container">
-                                <?php if (!empty($subjectsNeeded)) : ?>
-                                    <?php foreach ($subjectsNeeded as $index => $subject) : ?>
-                                        <div class="subject-quota-row mb-3 p-3 border rounded">
+                                <?php if (!empty($programmesNeeded)) : ?>
+                                    <?php foreach ($programmesNeeded as $index => $programme) : ?>
+                                        <div class="subject-quota-row mb-3 p-3 border rounded existing-programme" data-requirement-id="<?= esc($programme['centre_programme_requirement_id']) ?>">
                                             <div class="row">
                                                 <div class="col-md-6">
-                                                    <label for="subject_<?= $index ?>">Subject</label>
-                                                    <select class="form-control" name="subjects[<?= $index ?>][teach_subject_id]" id="subject_<?= $index ?>" required>
-                                                        <option value="">Select Subject</option>
-                                                        <?php if (!empty($availableSubjects)) : ?>
-                                                            <?php foreach ($availableSubjects as $availableSubject) : ?>
-                                                                <option value="<?= $availableSubject['teach_subject_id'] ?>" 
-                                                                    <?= (isset($subject['teach_subject_id']) && $subject['teach_subject_id'] == $availableSubject['teach_subject_id']) ? 'selected' : '' ?>>
-                                                                    <?= esc($availableSubject['teach_subject_name']) ?>
+                                                    <label for="programme_<?= $index ?>">Programme</label>
+                                                    <select class="form-control" name="programmes[<?= $index ?>][programme_id]" id="programme_<?= $index ?>" required>
+                                                        <option value="">Select Programme</option>
+                                                        <?php if (!empty($availableProgrammes)) : ?>
+                                                            <?php foreach ($availableProgrammes as $availableProgramme) : ?>
+                                                                <option value="<?= $availableProgramme['programme_id'] ?>" 
+                                                                    <?= ($programme['programme_id'] == $availableProgramme['programme_id']) ? 'selected' : '' ?>>
+                                                                    <?= esc($availableProgramme['programme_name']) ?>
                                                                 </option>
                                                             <?php endforeach; ?>
                                                         <?php endif; ?>
                                                     </select>
+                                                    <!-- Hidden field to track existing requirement ID for updates -->
+                                                    <input type="hidden" name="programmes[<?= $index ?>][centre_programme_requirement_id]" value="<?= esc($programme['centre_programme_requirement_id']) ?>">
                                                 </div>
                                                 <div class="col-md-4">
                                                     <label for="quota_<?= $index ?>">Students Needed</label>
                                                     <input type="number" 
                                                         class="form-control quota-input" 
-                                                        name="subjects[<?= $index ?>][needed_quota]" 
+                                                        name="programmes[<?= $index ?>][quota_needed]" 
                                                         id="quota_<?= $index ?>" 
-                                                        value="<?= isset($subject['needed_quota']) ? esc($subject['needed_quota']) : '' ?>" 
+                                                        value="<?= esc($programme['quota_needed']) ?>" 
                                                         min="1" 
                                                         required>
                                                 </div>
                                                 <div class="col-md-2 d-flex align-items-end">
-                                                    <button type="button" class="btn btn-danger btn-sm remove-subject">
+                                                    <button type="button" class="btn btn-danger btn-sm remove-subject" title="Remove this programme requirement">
                                                         <i class="fa fa-trash"></i>
                                                     </button>
+                                                    <!-- Status indicator for existing programmes -->
+                                                    <div class="existing-indicator" style="position: absolute; top: -5px; right: -5px; background: #28a745; color: white; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 10px;">
+                                                        <i class="fa fa-check"></i>
+                                                    </div>
                                                 </div>
+                                            </div>
+                                            <!-- Show current status for existing programmes -->
+                                            <div class="mt-2">
+                                                <small class="text-success">
+                                                    <i class="fa fa-info-circle"></i> 
+                                                    Current requirement: <?= esc($programme['quota_needed']) ?> students
+                                                    <span class="text-muted">| ID: <?= esc($programme['centre_programme_requirement_id']) ?></span>
+                                                </small>
                                             </div>
                                         </div>
                                     <?php endforeach; ?>
+                                <?php else: ?>
+                                    <!-- Show empty state when no existing requirements -->
+                                    <div id="empty-programmes-state" class="text-center py-4">
+                                        <i class="fa fa-graduation-cap fa-3x text-muted mb-3"></i>
+                                        <h5 class="text-muted">No Programme Requirements Set</h5>
+                                        <p class="text-muted">This centre hasn't set up any programme quota requirements yet.</p>
+                                        <p class="text-info">Click "Add Another Programme" below to start setting up quota requirements.</p>
+                                    </div>
                                 <?php endif; ?>
                             </div>
                             
-                            <button type="button" class="btn btn-success btn-sm" id="add-subject">
-                                <i class="fa fa-plus"></i> Add Another Subject
-                            </button>
-                        </div>
-
-                        <!-- Quota Validation Warning -->
-                        <div id="quota-warning" class="alert alert-warning mt-3" style="display: none;">
-                            <strong>Notice:</strong> You have reached the JPN allocated quota limit. You cannot add more subjects or increase student numbers beyond this limit.
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <button type="button" class="btn btn-success btn-sm" id="add-subject">
+                                    <i class="fa fa-plus"></i> Add Another Programme
+                                </button>
+                                
+                                <!-- Total Display -->
+                                <div class="total-display">
+                                    <strong>Total Students Needed: <span id="total-quota" class="text-primary">0</span></strong>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -587,8 +576,8 @@
                                 <?php foreach ($allPracticumTypes as $practicum) : ?>
                                     <?php 
                                     $isChecked = false;
-                                    if (!empty($schoolPracticumFor)) {
-                                        foreach ($schoolPracticumFor as $assigned) {
+                                    if (!empty($industryPracticumFor)) {
+                                        foreach ($industryPracticumFor as $assigned) {
                                             if ($assigned['practicum_type_id'] == $practicum['practicum_type_id']) {
                                                 $isChecked = true;
                                                 break; 
@@ -628,13 +617,13 @@
 
 <script>
 // Initialize map
-var mapEditor = L.map('map-editor').setView([<?= esc($schoolDetail[0]['latitude'] ?? '3.139') ?>, <?= esc($schoolDetail[0]['longitude'] ?? '101.6869') ?>], 15);
+var mapEditor = L.map('map-editor').setView([<?= esc($industryDetail[0]['latitude'] ?? '3.139') ?>, <?= esc($industryDetail[0]['longitude'] ?? '101.6869') ?>], 15);
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; OpenStreetMap contributors'
 }).addTo(mapEditor);
 
-var marker = L.marker([<?= esc($schoolDetail[0]['latitude'] ?? '3.139') ?>, <?= esc($schoolDetail[0]['longitude'] ?? '101.6869') ?>]).addTo(mapEditor);
+var marker = L.marker([<?= esc($industryDetail[0]['latitude'] ?? '3.139') ?>, <?= esc($industryDetail[0]['longitude'] ?? '101.6869') ?>]).addTo(mapEditor);
 
 // Map click event
 mapEditor.on('click', function(e) {
@@ -1047,88 +1036,158 @@ function showToast(message, type = 'info') {
 
 //Quota Management Section
 $(document).ready(function() {
-    let subjectIndex = <?= !empty($subjectsNeeded) ? count($subjectsNeeded) : 0 ?>;
-    const jpnQuota = <?= isset($schoolDetail[0]['quota_limit']) ? $schoolDetail[0]['quota_limit'] : 0 ?>;
+    let programmeIndex = <?= !empty($programmesNeeded) ? count($programmesNeeded) : 0 ?>;
     
-    // Add new subject row
+    // Add new subject row for centre_programme_requirement
     $('#add-subject').click(function() {
+        // Remove empty state if it exists
+        removeEmptyState();
+        
         const subjectRow = `
-            <div class="subject-quota-row mb-3 p-3 border rounded">
+            <div class="subject-quota-row mb-3 p-3 border rounded new-programme">
                 <div class="row">
                     <div class="col-md-6">
-                        <label for="subject_${subjectIndex}">Subject</label>
-                        <select class="form-control" name="subjects[${subjectIndex}][teach_subject_id]" id="subject_${subjectIndex}" required>
-                            <option value="">Select Subject</option>
-                            <?php if (!empty($availableSubjects)) : ?>
-                                <?php foreach ($availableSubjects as $availableSubject) : ?>
-                                    <option value="<?= $availableSubject['teach_subject_id'] ?>">
-                                        <?= esc($availableSubject['teach_subject_name']) ?>
+                        <label for="programme_${programmeIndex}">Programme</label>
+                        <select class="form-control" name="programmes[${programmeIndex}][programme_id]" id="programme_${programmeIndex}" required>
+                            <option value="">Select Programme</option>
+                            <?php if (!empty($availableProgrammes)) : ?>
+                                <?php foreach ($availableProgrammes as $availableProgramme) : ?>
+                                    <option value="<?= $availableProgramme['programme_id'] ?>">
+                                        <?= esc($availableProgramme['programme_name']) ?>
                                     </option>
                                 <?php endforeach; ?>
                             <?php endif; ?>
                         </select>
+                        <!-- Hidden field to indicate this is a new requirement (no centre_programme_requirement_id) -->
+                        <input type="hidden" name="programmes[${programmeIndex}][centre_programme_requirement_id]" value="">
                     </div>
                     <div class="col-md-4">
-                        <label for="quota_${subjectIndex}">Students Needed</label>
+                        <label for="quota_${programmeIndex}">Students Needed</label>
                         <input type="number" 
                                class="form-control quota-input" 
-                               name="subjects[${subjectIndex}][needed_quota]" 
-                               id="quota_${subjectIndex}" 
+                               name="programmes[${programmeIndex}][quota_needed]" 
+                               id="quota_${programmeIndex}" 
                                min="1" 
                                required>
                     </div>
                     <div class="col-md-2 d-flex align-items-end">
-                        <button type="button" class="btn btn-danger btn-sm remove-subject">
+                        <button type="button" class="btn btn-danger btn-sm remove-subject" title="Remove this programme requirement">
                             <i class="fa fa-trash"></i>
                         </button>
+                        <!-- New indicator for newly added programmes -->
+                        <div class="new-indicator" style="position: absolute; top: -5px; right: -5px; background: #17a2b8; color: white; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 10px;">
+                            <i class="fa fa-plus"></i>
+                        </div>
                     </div>
+                </div>
+                <div class="mt-2">
+                    <small class="text-info">
+                        <i class="fa fa-info-circle"></i> New programme requirement - will be saved to centre_programme_requirement table
+                    </small>
                 </div>
             </div>
         `;
         $('#subject-quota-container').append(subjectRow);
-        subjectIndex++;
+        programmeIndex++;
         calculateTotal();
     });
     
-    // Remove subject row
+    // Remove subject row - Enhanced to handle centre_programme_requirement table
     $(document).on('click', '.remove-subject', function() {
-        $(this).closest('.subject-quota-row').remove();
-        calculateTotal();
+        const $row = $(this).closest('.subject-quota-row');
+        const isExisting = $row.hasClass('existing-programme');
+        const requirementId = $row.data('requirement-id');
+        const programmeName = $row.find('select option:selected').text();
+        const quota = $row.find('.quota-input').val();
+        
+        // Confirmation message
+        let confirmMsg = 'Are you sure you want to remove this programme requirement?';
+        if (isExisting && requirementId) {
+            confirmMsg = `Remove existing programme requirement?\n\nProgramme: ${programmeName}\nCurrent Quota: ${quota} students\n\nThis will delete the record from centre_programme_requirement table.`;
+        }
+        
+        if (confirm(confirmMsg)) {
+            // If it's an existing programme, add it to deletion list
+            if (isExisting && requirementId) {
+                // Add hidden input to track deletions for centre_programme_requirement table
+                const deleteInput = `<input type="hidden" name="centre_programme_requirements_to_delete[]" value="${requirementId}">`;
+                $('#centreForm').append(deleteInput);
+            }
+            
+            $row.fadeOut(300, function() {
+                $(this).remove();
+                calculateTotal();
+                
+                // Check if no programmes left
+                if ($('.subject-quota-row').length === 0) {
+                    showEmptyState();
+                }
+            });
+        }
     });
     
-    // Calculate total when quota inputs change
+    // Show empty state when no programmes
+    function showEmptyState() {
+        if ($('.subject-quota-row').length === 0) {
+            const emptyState = `
+                <div id="empty-programmes-state" class="text-center py-4">
+                    <i class="fa fa-graduation-cap fa-3x text-muted mb-3"></i>
+                    <h5 class="text-muted">No Programme Requirements</h5>
+                    <p class="text-muted">Click "Add Another Programme" to set up your quota requirements.</p>
+                </div>
+            `;
+            $('#subject-quota-container').html(emptyState);
+        }
+    }
+    
+    // Remove empty state when adding programmes
+    function removeEmptyState() {
+        $('#empty-programmes-state').remove();
+    }
+    
+    // Calculate total when quota values change
     $(document).on('input', '.quota-input', function() {
         calculateTotal();
     });
     
-    // Calculate total function
+    // Calculate total quota function
     function calculateTotal() {
         let total = 0;
         $('.quota-input').each(function() {
             const value = parseInt($(this).val()) || 0;
             total += value;
         });
-
-        if (total >= jpnQuota) {
-            $('#quota-warning').show();
-            $('#add-subject').prop('disabled', true);
-
-            // Disable increasing further
-            $('.quota-input').each(function() {
-                const currentVal = parseInt($(this).val()) || 0;
-                const remaining = jpnQuota - (total - currentVal);
-                $(this).attr('max', remaining); // set max so they cannot increase beyond limit
-            });
+        $('#total-quota').text(total);
+        
+        // Visual feedback
+        if (total > 0) {
+            $('#total-quota').removeClass('text-muted').addClass('text-primary');
         } else {
-            $('#quota-warning').hide();
-            $('#add-subject').prop('disabled', false);
-
-            // Reset max so fields can adjust freely again
-            $('.quota-input').removeAttr('max');
+            $('#total-quota').removeClass('text-primary').addClass('text-muted');
         }
     }
     
     // Initial calculation
     calculateTotal();
+    
+    // Form validation for programmes
+    $('#centreForm').on('submit', function(e) {
+        let hasValidProgramme = false;
+        $('.subject-quota-row').each(function() {
+            const programmeSelect = $(this).find('select[name*="programme_id"]');
+            const quotaInput = $(this).find('input[name*="quota_needed"]');
+            
+            if (programmeSelect.val() && parseInt(quotaInput.val()) > 0) {
+                hasValidProgramme = true;
+                return false; // break loop
+            }
+        });
+        
+        if (!hasValidProgramme) {
+            e.preventDefault();
+            alert('Please select at least one programme with a valid quota.');
+            return false;
+        }
+    });
 });
 </script>

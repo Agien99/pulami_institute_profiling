@@ -11,6 +11,7 @@ use Modules\industry\Models\li_sector;
 use Modules\industry\Models\li_industry;
 use Modules\industry\Models\practicum_type;
 use Modules\industry\Models\centre_subject_requirement;
+use Modules\industry\Models\centre_programme_requirement;
 
  class updateCentre extends BaseController
  {
@@ -28,6 +29,7 @@ use Modules\industry\Models\centre_subject_requirement;
         $this->industryTypeModel = new li_industry();
         $this->practicumTypeModel = new practicum_type();
         $this->centreSubjectRequirementModel = new centre_subject_requirement();
+        $this->centreProgrammeRequirementModel = new centre_programme_requirement();
     }
 
     
@@ -37,7 +39,7 @@ use Modules\industry\Models\centre_subject_requirement;
 
             //Basic Information
             $centreId           = $this->request->getPost('centre_id');
-            $centreCode           = $this->request->getPost('centre_code');
+            $centreCode         = $this->request->getPost('centre_code');
             $centreName         = $this->request->getPost('centre_name');
             $centreAddress      = $this->request->getPost('centre_address');
             $centrePostcode     = $this->request->getPost('centre_postcode');
@@ -47,15 +49,12 @@ use Modules\industry\Models\centre_subject_requirement;
             $centreEmail        = $this->request->getPost('centre_email');
             $centreLatitude     = $this->request->getPost('latitude');
             $centreLongitude    = $this->request->getPost('longitude');
-            $subjects           = $this->request->getPost('subjects');
-
-            //School Information
-            $schoolTypeId         = $this->request->getPost('school_type_id');
-            $schoolLocationId     = $this->request->getPost('school_location_id');
+            $programmes         = $this->request->getPost('programmes');
 
             //Industry Information
             $industrySector     = $this->request->getPost('sector_id');
-            $industryType     = $this->request->getPost('industry_type_id');
+            $industryType       = $this->request->getPost('industry_type_id');
+            $allowance          = $this->request->getPost('allowance');
 
             // Update DB
             $db      = \Config\Database::connect();
@@ -69,10 +68,9 @@ use Modules\industry\Models\centre_subject_requirement;
                                 'state_id' => $stateId,
                                 'centre_phone' => $centrePhone,
                                 'centre_email' => $centreEmail,
+                                'allowance' => $allowance,
                                 'latitude' => $centreLatitude,
                                 'longitude' => $centreLongitude,
-                                'school_type_id' => $schoolTypeId,
-                                'school_location_id' => $schoolLocationId,
                                 'li_sector_id' => $industrySector,
                                 'industry_li_id' => $industryType
                             ]);
@@ -110,7 +108,7 @@ use Modules\industry\Models\centre_subject_requirement;
                 foreach ($files['gallery_images'] as $file) {
                     if ($file->isValid() && !$file->hasMoved()) {
                         $newName = $file->getRandomName();
-                        $file->move(FCPATH . 'image/schooldetail/' . $centreCode. '/', $newName);
+                        $file->move(FCPATH . 'image/industrydetail/' . $centreCode. '/', $newName);
 
                         // Insert into DB
                         $db->table('centre_image')->insert([
@@ -152,60 +150,60 @@ use Modules\industry\Models\centre_subject_requirement;
             }
 
             // Quota Management
-            if (!empty($subjects)) {
+            if (!empty($programmes)) {
 
-                // 1️⃣ Get existing subjects for this centre
-                $existing = $this->centreSubjectRequirementModel
+                // 1️⃣ Get existing programmes for this centre
+                $existing = $this->centreProgrammeRequirementModel
                     ->where('centre_id', $centreId)
                     ->findAll();
 
                 $existingMap = [];
                 foreach ($existing as $row) {
-                    $existingMap[$row['teach_subject_id']] = $row;
+                    $existingMap[$row['programme_id']] = $row;
                 }
 
                 $toInsert = [];
                 $toUpdate = [];
                 $keepIds  = [];
 
-                foreach ($subjects as $row) {
-                    $teachSubjectId = $row['teach_subject_id'];
-                    $neededQuota    = $row['needed_quota'];
+                foreach ($programmes as $row) {
+                    $programmeId    = $row['programme_id'];
+                    $neededQuota    = $row['quota_needed'];
 
-                    if (isset($existingMap[$teachSubjectId])) {
+                    if (isset($existingMap[$programmeId])) {
                         // already exists → update
                         $toUpdate[] = [
-                            'centre_subject_requirement_id' => $existingMap[$teachSubjectId]['centre_subject_requirement_id'], // ✅ use correct PK
-                            'needed_quota'                  => $neededQuota,
+                            'centre_programme_requirement_id'   => $existingMap[$programmeId]['centre_programme_requirement_id'], // ✅ use correct PK
+                            'quota_needed'   => $neededQuota,
                         ];
-                        $keepIds[] = $existingMap[$teachSubjectId]['centre_subject_requirement_id']; // ✅ use correct PK
+                        $keepIds[] = $existingMap[$programmeId]['centre_programme_requirement_id']; // ✅ use correct PK
                     } else {
-                        // new subject → insert
+                        // new programme → insert
                         $toInsert[] = [
-                            'centre_id'        => $centreId,
-                            'teach_subject_id' => $teachSubjectId,
-                            'needed_quota'     => $neededQuota
+                            'centre_id'         => $centreId,
+                            'programme_id'      => $programmeId,
+                            'quota_needed'      => $neededQuota
                         ];
                     }
                 }
 
                 // 2️⃣ Run updates
                 if (!empty($toUpdate)) {
-                    $this->centreSubjectRequirementModel->updateBatch($toUpdate, 'centre_subject_requirement_id'); // ✅
+                    $this->centreProgrammeRequirementModel->updateBatch($toUpdate, 'centre_programme_requirement_id'); // ✅
                 }
 
                 // 3️⃣ Run inserts
                 if (!empty($toInsert)) {
-                    $this->centreSubjectRequirementModel->insertBatch($toInsert);
+                    $this->centreProgrammeRequirementModel->insertBatch($toInsert);
                 }
 
-                // 4️⃣ Delete removed subjects
+                // 4️⃣ Delete removed programmes
                 if (!empty($existing)) {
-                    $existingIds = array_column($existing, 'centre_subject_requirement_id'); // ✅
+                    $existingIds = array_column($existing, 'centre_programme_requirement_id'); // ✅
                     $toDelete    = array_diff($existingIds, $keepIds);
                     if (!empty($toDelete)) {
-                        $this->centreSubjectRequirementModel
-                            ->whereIn('centre_subject_requirement_id', $toDelete) // ✅
+                        $this->centreProgrammeRequirementModel
+                            ->whereIn('centre_programme_requirement_id', $toDelete) // ✅
                             ->delete();
                     }
                 }
