@@ -31,6 +31,28 @@
             text-align: center;
             padding: 30px 15px;
         }
+        .login-buttons {
+            margin-top: 15px;
+        }
+        .login-buttons .btn {
+            margin-right: 10px;
+            margin-bottom: 5px;
+        }
+        .username-status {
+            margin-top: 10px;
+            font-size: 12px;
+            min-height: 20px;
+        }
+        .username-status .text-success {
+            color: #28a745 !important;
+        }
+        .username-status .text-danger {
+            color: #dc3545 !important;
+        }
+        .spinner-border-sm {
+            width: 1rem;
+            height: 1rem;
+        }
     </style>
 </head>
 <header class="header_area">
@@ -115,14 +137,20 @@
                         <div id="loginMessage"></div> <!-- message will appear here -->
                         <div class="mb-3">
                             <label>Username</label>
-                            <input type="username" name="username" class="form-control" required>
+                            <input type="text" name="username" id="username" class="form-control" required>
+                            <div id="usernameStatus" class="username-status"></div>
                         </div>
                         <div class="mb-3">
                             <label>Password</label>
                             <input type="password" name="password" class="form-control" required>
                         </div>
-                        <button type="submit" class="btn btn-primary" data-login-type="school">School Login</button>
-                        <button type="submit" class="btn btn-secondary" data-login-type="industry">Industry Login</button>
+                        <div class="login-buttons" id="loginButtons" style="display: none;">
+                            <button type="submit" class="btn btn-primary" id="schoolLoginBtn" data-login-type="school" style="display: none;">School Login</button>
+                            <button type="submit" class="btn btn-secondary" id="industryLoginBtn" data-login-type="industry" style="display: none;">Industry Login</button>
+                        </div>
+                        <div id="noAccessMessage" class="alert alert-warning" style="display: none; margin-top: 15px;">
+                            This username is not registered for any practicum type.
+                        </div>
                     </form>
                 </div>
             </div>
@@ -133,6 +161,98 @@
 <script>
 $(document).ready(function() {
     var loginType = 'school'; // default
+    var usernameCheckTimeout;
+
+    // Function to check username availability and practicum types
+    function checkUsername(username) {
+        if (username.length < 2) {
+            resetLoginButtons();
+            return;
+        }
+
+        $('#usernameStatus').html('<span class="spinner-border spinner-border-sm" role="status"></span> Checking username...');
+        
+        $.ajax({
+            type: "POST",
+            url: "<?= base_url('/checkUsername') ?>",
+            data: { username: username },
+            dataType: "json",
+            success: function(response) {
+                if (response.status === 'success') {
+                    var types = response.practicum_types;
+                    
+                    // Create numbered list of practicum types
+                    var numberedTypes = types.map(function(type, index) {
+                        return (index + 1) + '. ' + type;
+                    });
+                    
+                    var statusText = '<span class="text-success">✓ Username found! <br> Available for:<br> ' + numberedTypes.join('<br>') + '</span>';
+                    $('#usernameStatus').html(statusText);
+                    
+                    // Show appropriate buttons based on practicum types
+                    showLoginButtons(types);
+                } else {
+                    $('#usernameStatus').html('<span class="text-danger">✗ Username not found</span>');
+                    resetLoginButtons();
+                }
+            },
+            error: function() {
+                $('#usernameStatus').html('<span class="text-danger">✗ Error checking username</span>');
+                resetLoginButtons();
+            }
+        });
+    }
+
+    // Function to show appropriate login buttons
+    function showLoginButtons(types) {
+        $('#loginButtons').show();
+        $('#noAccessMessage').hide();
+        $('#schoolLoginBtn').hide();
+        $('#industryLoginBtn').hide();
+
+        var hasSchoolAccess = types.includes('Perantis Guru') || types.includes('Latihan Mengajar');
+        var hasIndustryAccess = types.includes('Latihan Industri');
+
+        if (hasSchoolAccess) {
+            $('#schoolLoginBtn').show();
+        }
+
+        if (hasIndustryAccess) {
+            $('#industryLoginBtn').show();
+        }
+
+        if (!hasSchoolAccess && !hasIndustryAccess) {
+            $('#loginButtons').hide();
+            $('#noAccessMessage').show();
+        }
+    }
+
+    // Function to reset login buttons
+    function resetLoginButtons() {
+        $('#loginButtons').hide();
+        $('#noAccessMessage').hide();
+        $('#schoolLoginBtn').hide();
+        $('#industryLoginBtn').hide();
+        $('#usernameStatus').html('');
+    }
+
+    // Username input event with debouncing
+    $('#username').on('input', function() {
+        var username = $(this).val().trim();
+        
+        // Clear previous timeout
+        clearTimeout(usernameCheckTimeout);
+        
+        if (username.length === 0) {
+            resetLoginButtons();
+            return;
+        }
+
+        // Set new timeout for username checking (500ms delay)
+        usernameCheckTimeout = setTimeout(function() {
+            checkUsername(username);
+        }, 500);
+    });
 
     // Detect which button is clicked
     $('#loginForm button[type=submit]').click(function(e) {
@@ -144,10 +264,17 @@ $(document).ready(function() {
         var form = $(this);
         $('#loginMessage').html('');
 
+        // Check if username is valid before proceeding
+        var username = $('#username').val().trim();
+        if (username.length < 2) {
+            $('#loginMessage').html('<div class="alert alert-danger">Please enter a valid username</div>');
+            return;
+        }
+
         $.ajax({
             type: "POST",
             url: form.attr('action'),
-            data: form.serialize() + '&login_type=' + loginType, // send type
+            data: form.serialize() + '&login_type=' + loginType,
             dataType: "json",
             success: function(response) {
                 if(response.status === 'success') {
@@ -168,5 +295,12 @@ $(document).ready(function() {
             }
         });
     });
+
+    // Reset form when modal is closed
+    $('#loginModal').on('hidden.bs.modal', function() {
+        $('#loginForm')[0].reset();
+        resetLoginButtons();
+        $('#loginMessage').html('');
+    });
 });
-</script>
+</script></document_content>
