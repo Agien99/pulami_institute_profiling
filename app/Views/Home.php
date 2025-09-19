@@ -156,9 +156,18 @@
                         data-index="<?= $index ?>">
                         <div class="accomodation_item text-center">
                             <div class="hotel_img">
-                                <img src="<?= $school['centre_image_id'] ? base_url('image/' . $school['centre_code'] . '/' . $school['centre_image_id']) : base_url('image/plmi.png') ?>" 
-                                    width="230" height="230" alt="">
-                                <a href="<?= base_url('detail/' . $school['centre_id']) ?>" class="btn theme_btn button_hover">Learn more</a>
+                                <?php 
+                                    $images = !empty($school['centre_image_attachments']) 
+                                        ? explode(',', $school['centre_image_attachments']) 
+                                        : [];
+                                    $firstImage = $images[0] ?? null;
+                                ?>
+                                <img 
+                                    src="<?= $firstImage ? base_url('image/schooldetail/' . $school['centre_code'] . '/' . trim($firstImage)) : base_url('image/plmi.png') ?>" 
+                                    class="img-fluid"
+                                    style="width:230px; height:230px; object-fit:cover;" 
+                                    alt="">
+                                <a href="<?= base_url('detail2/' . $school['centre_id']) ?>" class="btn theme_btn button_hover">Learn more</a>
                             </div>
                             <a href="<?= base_url('detail/' . $school['centre_id']) ?>">
                                 <h4 class="sec_h4"><?= esc($school['centre_name']) ?></h4>
@@ -206,7 +215,7 @@
             <p>For ISM/ISM student that are going for your teaching practice </p>
         </div>
         <div class="row mb_30">
-            <?php if (!empty($schoolList)) : ?>
+            <?php if (!empty($companyList)) : ?>
                 <?php foreach ($companyList as $index => $company) : ?>
                     <div class="col-lg-3 col-sm-6" 
                         data-state="<?= $company['state_id'] ?>" 
@@ -214,8 +223,17 @@
                         data-index="<?= $index ?>">
                         <div class="accomodation_item text-center">
                             <div class="hotel_img">
-                                <img src="<?= $company['centre_image_id'] ? base_url('image/' . $company['centre_code'] . '/' . $company['centre_image_id']) : base_url('image/plmi.png') ?>" 
-                                    width="230" height="230" alt="">
+                                <?php 
+                                    $images = !empty($company['centre_image_attachments']) 
+                                        ? explode(',', $company['centre_image_attachments']) 
+                                        : [];
+                                    $firstImage = $images[0] ?? null;
+                                ?>
+                                <img 
+                                    src="<?= $firstImage ? base_url('image/industrydetail/' . $company['centre_code'] . '/' . trim($firstImage)) : base_url('image/plmi.png') ?>" 
+                                    class="img-fluid"
+                                    style="width:230px; height:230px; object-fit:cover;" 
+                                    alt="">
                                 <a href="<?= base_url('detail2/' . $company['centre_id']) ?>" class="btn theme_btn button_hover">Learn more</a>
                             </div>
                             <a href="<?= base_url('detail2/' . $company['centre_id']) ?>">

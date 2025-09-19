@@ -57,7 +57,7 @@
                                     </ul>
                                 </div>
                                 <br>
-                                <div id="map" style="height: 300px;width:700px">
+                                <div id="map" style="height:300px; width:100%; max-width:700px;">
                                 </div>
                                 
                             </div>
@@ -66,7 +66,7 @@
                                     <?php if (!empty($schoolImage)) : ?>
                                         <?php foreach ($schoolImage as $index => $schoolImages) : ?>
                                             <div class="col-6">
-                                                <img class="img-fluid" style="height:180px ; width:450px; padding-bottom:10px" src="image/schooldetail/<?= esc($schoolFacility['facilities_name']) ?>" alt="">
+                                                <img class="img-fluid" style="height:180px ; width:450px; object-fit:cover; padding-bottom:10px" src="<?= base_url('image/schooldetail/') . esc($schoolImages['centre_code']) . '/' . esc($schoolImages['centre_image_attachment']) ?>" alt="">
                                             </div>
                                         <?php endforeach; ?>
                                         <?php else: ?>
