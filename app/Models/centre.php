@@ -63,7 +63,9 @@ class centre extends Model
             ci.centre_image_attachment,
             ci.centre_image_id,
             STRING_AGG(pt.practicum_type_desc, ', ') AS practicum_type_desc,
-            STRING_AGG(pt.practicum_type_id::text, ',') AS practicum_type_id
+            STRING_AGG(pt.practicum_type_id::text, ',') AS practicum_type_id,
+            STRING_AGG(DISTINCT ci.centre_image_attachment, ',') AS centre_image_attachments,
+            STRING_AGG(DISTINCT ci.centre_image_id::text, ',') AS centre_image_ids
         ", false);
 
         $builder->join('centre_practicum_type cpt', 'cpt.centre_id = c.centre_id', 'left');
@@ -179,10 +181,10 @@ class centre extends Model
             ct.city_name,
             s.state_name,
             s.state_id,
-            ci.centre_image_attachment,
-            ci.centre_image_id,
-            STRING_AGG(pt.practicum_type_desc, ', ') AS practicum_type_desc,
-            STRING_AGG(pt.practicum_type_id::text, ',') AS practicum_type_id
+            STRING_AGG(DISTINCT pt.practicum_type_desc, ', ') AS practicum_type_desc,
+            STRING_AGG(DISTINCT pt.practicum_type_id::text, ',') AS practicum_type_id,
+            STRING_AGG(DISTINCT ci.centre_image_attachment, ',') AS centre_image_attachments,
+            STRING_AGG(DISTINCT ci.centre_image_id::text, ',') AS centre_image_ids
         ", false);
 
         $builder->join('centre_practicum_type cpt', 'cpt.centre_id = c.centre_id', 'left');
@@ -191,7 +193,7 @@ class centre extends Model
         $builder->join('state s', 's.state_id = c.state_id');
         $builder->join('centre_image ci', 'ci.centre_id = c.centre_id', 'left');
 
-        $builder->groupBy('c.centre_id, ct.city_name, s.state_name, s.state_id, ci.centre_image_attachment, ci.centre_image_id');
+        $builder->groupBy('c.centre_id, ct.city_name, s.state_name, s.state_id');
         $builder->orderBy('s.state_id', 'ASC');
         $builder->orderBy('c.city_id', 'ASC');
         $builder->where('cpt.practicum_type_id', '12');
