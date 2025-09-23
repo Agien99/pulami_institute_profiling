@@ -54,7 +54,7 @@ use Modules\industry\Models\centre_programme_requirement;
             //Industry Information
             $industrySector     = $this->request->getPost('sector_id');
             $industryType       = $this->request->getPost('industry_type_id');
-            $allowance          = $this->request->getPost('allowance');
+            $allowance          = $this->request->getPost('industry_allowance');
 
             // Update DB
             $db      = \Config\Database::connect();
