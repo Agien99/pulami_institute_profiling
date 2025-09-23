@@ -262,25 +262,6 @@
 </section>
 <!--================ LI Area  =================-->
 
-
-<!--================ More Institute Area Area  =================-->
-<section class="about_history_area section_gap">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-6 d_flex align-items-center">
-                <div class="about_content ">
-                    <h2 class="title title_color">More <br>Institute</h2>
-                    <p></p>
-                    <a href="more" class="button_hover theme_btn_two">View More</a>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <img class="img-fluid" src="image/more.jpg" alt="img">
-            </div>
-        </div>
-    </div>
-</section>
-
 <!--================ About History Area  =================-->
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
