@@ -72,12 +72,6 @@
                     <li class="nav-item <?= ($current == '') ? 'active' : '' ?>">
                         <a class="nav-link" href="<?= base_url('/') ?>">Home</a>
                     </li>
-                    <li class="nav-item <?= ($current == 'more') ? 'active' : '' ?>">
-                        <a class="nav-link" href="<?= base_url('/more') ?>">More Company</a>
-                    </li>
-                    <li class="nav-item <?= ($current == 'area') ? 'active' : '' ?>">
-                        <a class="nav-link" href="<?= base_url('/area') ?>">Search By Area</a>
-                    </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">School / Company Login</a>
                     </li>
