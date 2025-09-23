@@ -103,7 +103,7 @@
                                 <div class="book_tabel_item">
                                     <div class="input-group">
                                         <select id="state-filter" name="state" class="form-control">
-                                            <option value="">~State~</option>
+                                            <option value="">~All State~</option>
                                             <?php foreach ($state as $states): ?>
                                                 <option value="<?= $states['state_id'] ?>"><?= $states['state_name'] ?></option>
                                             <?php endforeach; ?>
@@ -115,7 +115,7 @@
                                 <div class="book_tabel_item">
                                     <div class="input-group">
                                         <select id="tag-filter" name="tag" class="form-control">
-                                            <option value="">~Tag~</option>
+                                            <option value="">~All Practicum~</option>
                                             <?php foreach ($tag as $tags): ?>
                                                 <option value="<?= $tags['practicum_type_id'] ?>"><?= $tags['practicum_type_code'] ?> - <?= $tags['practicum_type_desc'] ?></option>
                                             <?php endforeach; ?>
@@ -208,7 +208,7 @@
 <!--================ LM Area  =================-->
 
 <!--================ LI Area  =================-->
-<section class="accomodation_area section_gap">
+<section id="LI" class="accomodation_area section_gap">
     <div class="container">
         <div class="section_title text-center">
             <h2 class="title_color">Latihan Industri</h2>
@@ -217,7 +217,7 @@
         <div class="row mb_30">
             <?php if (!empty($companyList)) : ?>
                 <?php foreach ($companyList as $index => $company) : ?>
-                    <div class="col-lg-3 col-sm-6" 
+                    <div class="col-lg-3 col-sm-6 company-item" 
                         data-state="<?= $company['state_id'] ?>" 
                         data-tag="<?= isset($company['practicum_type_id']) ? $company['practicum_type_id'] : '' ?>"
                         data-index="<?= $index ?>">
@@ -305,8 +305,64 @@ let filteredItems = [];
 let totalItems = 0;
 
 $(document).ready(function() {
+    // Initialize nice select
+    $('#state-filter').niceSelect();
+    $('#tag-filter').niceSelect();
+
+    // Initialize filters, pagination, and section visibility on page load
+    filterCompanies();
     initializePagination();
+    updateSectionVisibility();
+
+    // Add change event listeners for filters
+    $('#state-filter').on('change', function() {
+        filterSchools();
+        filterCompanies();
+    });
+
+    $('#tag-filter').on('change', function() {
+        filterSchools();
+        filterCompanies();
+        updateSectionVisibility();
+    });
 });
+
+function filterCompanies() {
+    const stateFilter = $('#state-filter').val();
+    const tagFilter = $('#tag-filter').val();
+
+    $('.company-item').each(function() {
+        const itemState = $(this).data('state').toString();
+        const itemTags = $(this).data('tag').toString().split(',');
+
+        let matchState = !stateFilter || stateFilter === '' || itemState === stateFilter;
+        let matchTag = !tagFilter || tagFilter === '' || itemTags.includes(tagFilter);
+
+        if (matchState && matchTag) {
+            $(this).show();
+        } else {
+            $(this).hide();
+        }
+    });
+}
+
+function updateSectionVisibility() {
+    const selectedOption = $('#tag-filter').find('option:selected');
+    const selectedTagText = selectedOption.text();
+    const lmSection = $('#LM');
+    const liSection = $('#LI');
+
+    if (selectedTagText.includes('LM') || selectedTagText.includes('PG')) {
+        lmSection.show();
+        liSection.hide();
+    } else if (selectedTagText.includes('LI')) {
+        lmSection.hide();
+        liSection.show();
+    } else {
+        lmSection.show();
+        liSection.show();
+    }
+}
 
 function initializePagination() {
     // Get all school items
@@ -347,34 +403,6 @@ function filterSchools() {
         scrollTop: $('#LM').offset().top - 100
     }, 500);
 }
-
-$(document).ready(function() {
-    initializePagination();
-
-    // Auto filter when dropdown changes
-    $('#state-filter').on('change', function() {
-        filterSchools();
-    });
-
-    $('#tag-filter').on('change', function() {
-        filterSchools();
-    });
-});
-
-$(document).ready(function() {
-    $('#state-filter').niceSelect();
-    $('#tag-filter').niceSelect();
-
-    initializePagination();
-
-    $('#state-filter').on('change', function() {
-        filterSchools();
-    });
-
-    $('#tag-filter').on('change', function() {
-        filterSchools();
-    });
-});
 
 function showPage(page) {
     currentPage = page;
