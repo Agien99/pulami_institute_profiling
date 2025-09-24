@@ -133,6 +133,7 @@
 </section>
 <!--================Banner Area =================-->
 
+
 <!--================ LM Area  =================-->
 <section id="LM" class="accomodation_area section_gap">
     <div class="container">
