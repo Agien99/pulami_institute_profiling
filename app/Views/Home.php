@@ -168,7 +168,7 @@
                                     class="img-fluid"
                                     style="width:230px; height:230px; object-fit:cover;" 
                                     alt="">
-                                <a href="<?= base_url('detail2/' . $school['centre_id']) ?>" class="btn theme_btn button_hover">Learn more</a>
+                                <a href="<?= base_url('detail/' . $school['centre_id']) ?>" class="btn theme_btn button_hover">Learn more</a>
                             </div>
                             <a href="<?= base_url('detail/' . $school['centre_id']) ?>">
                                 <h4 class="sec_h4"><?= esc($school['centre_name']) ?></h4>
